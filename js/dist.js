@@ -272,8 +272,8 @@ var devServer = 'https://hospital1-qa.intelligentlocations.io';
 
 
 angular.module('config', [])
-    .constant('API_URL', window.location.origin !== devOrigin ? window.location.origin + '/api' : devServer + '/api')
-    .constant('SOCKET_URL', window.location.origin !== devOrigin ? window.location.origin + '/api/websocket/connect' : devServer + '/api/websocket/connect')
+    .constant('API_URL', devServer + '/api')
+    .constant('SOCKET_URL', devServer + '/api/websocket/connect')
     .constant('SOCKET_TOPICS', {
         ALLOCATION: '/api/topic/beacon_allocation/',
         ALLOCATION_ASSETS: '/api/topic/beacon_allocation/ASSET/',
