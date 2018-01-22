@@ -6548,32 +6548,6 @@ angular.module('ilWebClient').controller('LoginController', ['$scope', '$state',
                 .catch(handleLoginError);
         };
 
-        function getStoreIosURL() {
-            UserService
-                .getStoreIosURL()
-                .then(function(response) {
-                    $scope.storeIosURL = response.url;
-                })
-                .catch(function(error) {
-                    setTimeout(getStoreURL, 30 * 1000);
-                });
-        }
-
-        getStoreIosURL();
-
-        function getStoreAndroidURL() {
-            UserService
-                .getStoreAndroidURL()
-                .then(function(response) {
-                    $scope.storeAndroidURL = response.url;
-                })
-                .catch(function(error) {
-                    setTimeout(getStoreURL, 30 * 1000);
-                });
-        }
-
-        getStoreAndroidURL();
-
         var loadRavenContext = function() {
             // var localUser = JSON.parse(localStorage.getItem('user'));
             // if (localUser) {
