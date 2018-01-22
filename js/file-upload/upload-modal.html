@@ -1,0 +1,57 @@
+<md-dialog flex="40" flex-md="60" flex-sm="100" class="upload-modal" layout-padding>
+    <md-progress-linear ng-show="uploadInProgress" md-mode="determinate" value="{{progressPercentage}}"></md-progress-linear>
+
+    <form ng-show="!uploadInProgress && !finishedUpload" name="form">
+        <md-dialog-content>
+            <div layout="column" layout-padding layout-margin>
+                <md-button class="md-raised md-primary" ngf-select ng-model="file" name="file" ngf-max-size="20MB" ngf-accept="'text/csv'">Select file</md-button>
+            </div>
+            <div ng-show="file" style="text-align: center;">
+                {{file.name}}
+            </div>
+        </md-dialog-content>
+    </form>
+
+    <div ng-show="finishedUpload && stats.errors.length !== 0">
+        <md-dialog-content>
+            <div layout="column" layout-padding layout-margin>
+                <div class="errors-title">
+                    Please correct these errors and retry the upload
+                </div>
+                <div class="stats">
+                    Valid entries: {{stats.correctEntries}}
+                    <br>
+                    Invalid entries: {{stats.incorrectEntries}}
+                </div>
+                <div class="errors-content">
+                    <div class="error-msg" ng-repeat="error in stats.errors">
+                        <span class="custom-font">{{$index + 1}} - {{error}}</span>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+    </div>
+
+    <div ng-show="finishedUpload && stats.errors.length === 0">
+        <md-dialog-content>
+            <div layout="column custom-font" layout-padding layout-margin>
+                Upload complete: {{stats.correctEntries}} items were added to the system.
+            </div>
+        </md-dialog-content>
+    </div>
+
+    <md-dialog-actions>
+        <md-button class="md-warn" ng-hide="uploadInProgress || (finishedUpload && stats.errors.length === 0)" ng-click="close(false)">
+            Cancel
+        </md-button>
+        <md-button class="md-primary" ng-click="backToFileSelection()" ng-show="finishedUpload && stats.errors.length !== 0">
+            Back To File Selection
+        </md-button>
+        <md-button class="md-primary" ng-disabled="!form.file.$valid || !file" ng-click="submit()" ng-show="!uploadInProgress && !finishedUpload">
+            Upload
+        </md-button>
+        <md-button class="md-primary" ng-click="close(true)" ng-show="finishedUpload && stats.errors.length === 0">
+            Finish
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

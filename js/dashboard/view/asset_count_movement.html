@@ -1,0 +1,126 @@
+<md-dialog flex="55" flex-md="65">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Asset Details</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always"> 
+            <md-tab label="Details">
+                <md-content layout="column">
+                    <div layout-margin>
+                        <div layout="row">
+                            <div class="md-title" md-colors="{color: 'primary'}">{{allocation.name}}</div>
+                        </div>
+                        <div layout="row">  
+                            <div class="md-subhead">{{allocation.assetType.name}}</div>
+                        </div>
+                    
+                        <md-table-container>
+                            <table md-table>
+                                <tbody md-body>
+                                    <tr md-row> 
+                                        <td md-cell>In</td>
+                                        <td md-cell>
+                                            <span ng-if="allocation.entryDate">Count Start Date</span>
+                                            <span ng-if="!allocation.entryDate">{{ (allocation.meta.movementStartDate | amDateFormat:'MM/DD/YYYY hh:mm A') || '-' }}</span>
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Status</td>
+                                        <td md-cell>{{allocation.status || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Description</td>
+                                        <td md-cell>
+                                            <span ng-if="allocation.meta.assetDescription">{{allocation.meta.assetDescription}}</span>
+                                            <span ng-if="!allocation.meta.assetDescription">{{'-'}}</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </md-table-container>
+                        </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Location History">
+                <md-content layout="column" layout-margin>
+                    <div layout-margin>
+                        <div layout="row">
+                            <div class="md-title" md-colors="{color: 'primary'}">{{allocation.name}}</div>
+                        </div>
+                        <div layout="row">  
+                            <div class="md-subhead">{{allocation.assetType.name}}</div>
+                        </div>
+                    </div>
+                    <!-- <div layout="row">
+                        <div>{{allocation.locationLabel}}:&nbsp</div>
+                        <div>
+                            {{allocation.location.area}}
+                            <span ng-if="!allocation.location.area && !allocation.location.room">Unknown</span>
+                            <span ng-if="allocation.location.area && allocation.location.room">, </span>
+                            {{allocation.location.room}}
+                        </div>
+                    </div> -->
+
+                    <!-- <md-card> -->
+                        <!-- <md-toolbar class="md-table-toolbar md-default"> -->
+                        <div layout="row" layout-margin> <!--<div class="md-toolbar-tools">-->
+                            <div class="md-subhead">
+                                Activity History
+                            </div>
+                        </div>
+                        <!-- </md-toolbar> -->
+                        
+                        <md-table-container ng-if="allocation.history.length != 0">
+                        <table md-table>
+                            <thead md-head>
+                                <tr md-row>
+                                    <th md-column>Count</th>
+                                    <th md-column>Start</th>
+                                    <th md-column>End</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="item in allocation.history">
+                                    <td md-cell>{{ item.count }}</td>
+                                    <td md-cell>{{ item.countStartDate | amDateFormat:'MM/DD/YYYY  h:mma'}}</td>
+                                    <td md-cell>{{ item.countEndDate | amDateFormat:'MM/DD/YYYY h:mma' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </md-table-container>
+                        <div layout="row" layout-margin ng-if="allocation.history.length == 0">No location history available</div>
+                        <div layout="row" layout-margin ng-show='isBusyRequestingData'>Loading history...</div>
+                    <!-- </md-card> -->
+                </md-content>
+            </md-tab>
+            <md-tab label="View Map" ng-if="allocationOptions.mapImageUrl">
+                <md-content layout="column" layout-margin>
+                    <div id="asset-map-id" layout="column">
+                        <leaflet-map style="height: 480px; width: 100%;" id="allocation-map" class="allocation-map-wrapper" image-overlay="allocationOptions.mapImageUrl"
+                            height="allocationOptions.height" width="allocationOptions.width" features="allocationFeatures" can-draw="false"
+                            can-edit="false" can-delete="false"></leaflet-map>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions layout="row" flex>
+        <div ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL" class="view-actions-container" flex="20" layout="row" layout-align="center center">
+            <md-button class="md-icon-button" ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL" ng-click="openAllocationForm('asset', allocation)">
+                <md-tooltip>Edit</md-tooltip>
+                <md-icon>mode_edit</md-icon>
+            </md-button>
+            <md-button class="md-icon-button md-warn" ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL" ng-click="discardCallback(allocation)">
+                <md-tooltip>Discharge</md-tooltip>
+                <md-icon>delete</md-icon>
+            </md-button>
+            <!--hidden btn because last button always gets hovered by default-->
+            <md-button ng-hide="true"></md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>

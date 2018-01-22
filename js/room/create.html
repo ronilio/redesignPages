@@ -1,0 +1,160 @@
+<md-dialog flex="40" ng-controller = "RoomEntityFormController">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Area Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <form name="form">
+        <md-dialog-content class="md-dialog-content">
+            <div layout="column">
+                <md-input-container>
+                    <label>Name</label>
+                    <input name="name" ng-model="model.name" required md-maxlength="60" minlength="4">
+
+                    <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Room']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Description</label>
+                    <textarea name="description" ng-model="model.description" md-maxlength="255"></textarea>
+
+                    <div ng-if="form.description.$dirty && form.description.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.description.$error['md-maxlength']">Please add less characters!</div>
+                    </div>
+                </md-input-container>
+
+                <md-autocomplete force-select
+                                 ng-if="!model.hasChildren"
+                                 ng-disabled="model.id != undefined && model.hasChildren"
+                                 md-no-cache="true"
+                                 md-selected-item="model.parent"
+                                 md-search-text="searchTextRoom"
+                                 md-items="option in querySearch(searchTextRoom, formOptions.rooms, 'name')"
+                                 md-item-text="option.name"
+                                 md-min-length="0"
+                                 md-select-on-match="true"
+                                 md-match-case-insensitive="true"
+                                 md-floating-label="Parent">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No items available
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-autocomplete force-select
+                                 md-no-cache="true"
+                                 md-selected-item="model.assetStatus"
+                                 md-search-text="searchTextRoomAssetStatus"
+                                 md-items="option in querySearch(searchTextRoomAssetStatus, formOptions.roomDefaultAssetStatuses, 'name')"
+                                 md-item-text="option.name"
+                                 md-input-minlength="2"
+                                 md-input-name="roomAssetStatus"
+                                 md-select-on-match="true"
+                                 md-match-case-insensitive="true"
+                                 md-floating-label="Default status for assets"
+                                 md-has-not-found="false">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No such status. Press <md-button ng-click="addNewStatus(searchTextRoomAssetStatus)">+</md-button> to create.
+                    </md-not-found>
+                    <div ng-if="form.roomAssetStatus.$dirty && form.roomAssetStatus.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.roomAssetStatus.$error['minlength']">Please add more characters!</div>
+                    </div>
+                </md-autocomplete>
+
+                <md-table-container ng-if="!model.hasChildren">
+                    <table md-table>
+                        <thead md-head>
+                            <th md-column>Asset type</th>
+                            <th md-column>Status</th>
+                            <th md-column>
+                                <md-button ng-show="!model.assetMappings || model.assetMappings.length == 0" aria-label="Add new type" class="md-icon-button " ng-click="addNewAssetType()">
+                                    <i class="zmdi zmdi-plus-circle zmdi-hc-2x special-blue"></i>
+                                </md-button>
+                            </th>
+                        </thead>
+                        <tbody md-body>
+                            <tr style="background-color: #FFFFFF" ng-repeat="assetTypeMapping in model.assetMappings">
+                                <td md-cell>
+                                    <md-input-container class="md-block" ng-if="!model.hasChildren && (PERMISSIONS.atrak || model.hospital.components.atrak)">
+                                        <md-select ng-change="validateAssetMapping(assetTypeMapping, $index)" aria-label="Asset Type" ng-model="assetTypeMapping.assetType"
+                                                   ng-model-options="{trackBy: '$value.id'}" ng-if="recreateSelect">
+                                            <md-option disabled ng-if="formOptions.assetTypes.length == 0">No items available</md-option>
+                                            <md-option style="color: darkgray" ng-value=null ng-click="removeAssetTypeMapping(assetTypeMapping)">None</md-option>
+                                            <md-option ng-repeat="option in formOptions.assetTypes" ng-value="option">
+                                                {{option.name}}
+                                            </md-option>
+                                        </md-select>
+                                        <div class="red-alert" ng-if="assetTypeValidationError[$index]" role="alert">
+                                                {{ assetTypeValidationError[$index] }}
+                                        </div>
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-input-container  class="md-block" ng-if="!model.hasChildren && (PERMISSIONS.atrak || model.hospital.components.atrak)">
+                                        <md-select ng-disabled = "!formIsValid" aria-label="Asset Status" ng-model="assetTypeMapping.assetStatus" ng-model-options="{trackBy: '$value.id'}" required>
+                                            <md-option disabled ng-if="assetStatusesForAssetType[assetTypeMapping.assetType.id].length == 0">No items available</md-option>
+                                            <md-option ng-repeat="option in assetStatusesForAssetType[assetTypeMapping.assetType.id]" ng-value="option">
+                                                {{option.status}}
+                                            </md-option>
+                                        </md-select>
+                                    </md-input-container>
+                                </td>
+                                <td md-cell>
+                                    <md-button ng-show="$last && assetTypeMapping.assetStatus != null" aria-label="Add new type" class="md-icon-button " ng-click="addNewAssetType()">
+                                        <i class="zmdi zmdi-plus-circle zmdi-hc-2x special-blue"></i>
+                                    </md-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </md-table-container>
+                <div layout="column" class="color-container" ng-if="!model.parent && (PERMISSIONS.ptrak || model.hospital.components.ptrak)">
+                    <label>Click to choose Area color</label>
+                    <div flex="100" layout="row">
+                        <div flex="{{100 / colors.length}}"
+                             ng-repeat="color in formOptions.colors"
+                             ng-style="{'background-color': color.hex, outline: 'none'}"
+                             ng-click="pickColor(color)">
+                            <animated-check is-checked="color.selected" text-color="{{color.textColor}}"></animated-check>
+                        </div>
+                    </div>
+                </div>
+
+                <md-checkbox class="checkbox-display" ng-model="model.sendNotification" ng-if="!model.parent && (PERMISSIONS.ptrak || model.hospital.components.ptrak)">
+                    Send notifications
+                </md-checkbox>
+
+                <md-checkbox class="checkbox-display" ng-if="PERMISSIONS.ptrak || model.hospital.components.ptrak" ng-model="model.dischargePatient">
+                    Automatic discharge
+                </md-checkbox>
+
+                <md-input-container>
+                    <label>Location delay (in seconds)</label>
+                    <input name="delay" type="number" ng-model="model.locateTimeThreshold">
+                </md-input-container>
+
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="save()"> Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

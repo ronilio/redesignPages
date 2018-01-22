@@ -1,0 +1,79 @@
+<md-dialog-content ng-init="addQuestion()">
+    <form name="form">
+        <div layout="column" layout-padding layout-margin>
+
+            <md-input-container>
+                <label>Name</label>
+                <input name="name" ng-model="model.name" required md-maxlength="60" minlength="4">
+                <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                    <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                    <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                </div>
+            </md-input-container>
+
+            <md-input-container>
+                <label>Description</label>
+                <textarea name="description" ng-model="model.description" md-maxlength="255" minlength="4"></textarea>
+                <div ng-if="form.description.$dirty && form.description.$invalid" role="alert">
+                    <div class="red-alert" ng-if="form.description.$error['md-maxlength']">Please add less characters!</div>
+                    <div class="red-alert" ng-if="form.description.$error['minlength']">Please add more characters!</div>
+                </div>
+            </md-input-container>
+
+
+            <md-toolbar ng-if="model.questions && model.questions.length > 0">
+                <div class="dictionaryToolbar md-toolbar-tools">
+                    <span class="dictionaryToolbarText">Survey Questions</span>
+                </div>
+            </md-toolbar>
+
+            <div ng-repeat="question in model.questions track by $index">
+                <md-input-container style="width: 100%" layout="row">
+                    <div flex="70">
+                        <label>Question #{{$index + 1}}</label>
+                        <textarea name="question_{{$index}}" flex ng-model="model.questions[$index].question" required md-maxlength="255"></textarea>
+                        <div ng-if="form['question_' + $index].$dirty && form['question_' + $index].$invalid" role="alert">
+                            <div class="red-alert" ng-if="form['question_' + $index].$error['md-maxlength']">Please add less characters!</div>
+                        </div>
+                    </div>
+                    <div flex="30" layout-gt-md="row" layout="column">
+                        <md-button class="md-icon-button md-warn" ng-click="removeQuestion($index, true)">
+                            <md-tooltip>Delete question</md-tooltip>
+                            <i class="zmdi zmdi-delete zmdi-hc-2x red" style="font-size: 22px"></i>
+                        </md-button>
+                        <md-button class="md-icon-button md-warn" ng-click="moveItem(model.questions, $index, $index - 1)">
+                            <md-tooltip>Move up</md-tooltip>
+                            <i class="zmdi zmdi-caret-up-circle zmdi-hc-2x green" style="font-size: 22px"></i>
+                        </md-button>
+                        <md-button class="md-icon-button md-warn" ng-click="moveItem(model.questions, $index, $index + 1)">
+                            <md-tooltip>Move down</md-tooltip>
+                            <i class="zmdi zmdi-caret-down-circle zmdi-hc-2x green" style="font-size: 22px"></i>
+                        </md-button>
+                    </div>
+                </md-input-container>
+
+                <md-checkbox class="checkbox-display" ng-model="model.questions[$index].freeText">
+                    Free answer
+                </md-checkbox>
+
+                <md-chips ng-model="model.questions[$index].answers"
+                          ng-if="!model.questions[$index].freeText"
+                          placeholder="Type and enter to add an answer option"
+                          delete-button-label="Remove answer"
+                          delete-hint="Press delete to remove answer"
+                          secondary-placeholder="+ New Answer">
+                    <md-chip-template>
+                        {{$chip}}
+                    </md-chip-template>
+                </md-chips>
+
+            </div>
+
+            <section layout="row" layout-sm="column" layout-align="start center" layout-wrap>
+                <md-button class="md-raised md-primary" ng-click="addQuestion()">Add Question</md-button>
+            </section>
+
+        </div>
+    </form>
+
+</md-dialog-content>

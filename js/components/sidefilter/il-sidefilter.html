@@ -1,0 +1,73 @@
+<div layout="column" layout-fill style="background:black">
+    <md-content class="il-side-filter" layout="row" layout-fill hide show-gt-xs>
+        <div layout="column" layout-fill layout-margin>
+            <div layout="row" class="il-search-bar" flex="none">
+                <md-input-container class="md-block" md-no-float flex>
+                    <input id="search-input" type="text" ng-model="search" ng-change="sidefilter.onSearchInput(search)" ng-model-options="{updateOn: 'keyup'}" placeholder="Search" aria-label="Search" update-on-enter/>
+                    <md-icon class="il-search-icon">search</md-icon>
+                </md-input-container>
+            </div>
+            <div layout="row" flex="none">
+                <div layout="column" class="md-title" flex>
+                    <div layout="row" layout-align="start end" flex>
+                        Filters
+                    </div>
+                </div> 
+                <div layout="column" class="md-caption" layout-align="end end" flex>
+                    <md-button class="md-accent md-small" layout="row" layout-align="end end" ng-click="sidefilter.clearAll()" ng-disabled="sidefilter.filters.length == 0">
+                        Clear All
+                    </md-button>
+                </div>
+            </div>
+            <div ng-if="sidefilter.filters.length > 0">
+                <div layout="row" ng-repeat="filter in sidefilter.filters">
+                    <div layout="column" flex> 
+                        <div layout="row">
+                            <div layout="column" class="md-subhead" flex>
+                                <div class="md-body-2" layout="row" layout-align="start end" flex>
+                                    {{filter.title}}
+                                </div>
+                            </div>
+                            <div layout="column" class="md-caption" flex layout-align="end end">
+                                <md-button class="md-accent md-small" layout="row" layout-align="end end" ng-click="sidefilter.clearSection(filter.title)">
+                                    Clear
+                                </md-button>
+                            </div>
+                        </div>
+                        <md-divider></md-divider>
+                        <div layout="row">
+                            <!-- TODO: search section -->
+                        </div>
+                        <div layout="row" layout-padding flex>
+                            <md-list class="il-scrollable" layout="column" ng-if="filter.options.length > 0" flex> 
+                                <md-checkbox class="md-accent" ng-repeat="option in filter.options" ng-model="option.selected" ng-change="sidefilter.onFilterSelected(option, filter.title)" layout-wrap>
+                                    {{option.label}}<span> </span>({{option.count}})
+                                </md-checkbox>
+                            </md-list>
+                            <div ng-if="filter.options.length == 0" layout-align="center" flex>
+                                No options available
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Date filter box would go here -->
+                <div>
+
+                </div>
+            </div>
+                
+            <div layout="row" layout-align="center" ng-show="sidefilter.filters.length == 0" flex>
+                <div layout="column" flex>
+                    <!-- TODO: Determine a mechanism to know whether load failed or had no filters -->
+                    <!-- <div layout="row" layout-align="center start">
+                        No Filters
+                    </div> -->
+                    <div layout="row" layout-align="center center" flex>
+                        <md-progress-circular class="md-accent" md-mode="indeterminate" md-diameter="20"></md-progress-circular>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <md-divider></md-divider>
+    </md-content>
+</div>

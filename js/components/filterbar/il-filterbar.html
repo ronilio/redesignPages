@@ -1,0 +1,53 @@
+ <div id="il-background-override" class="il-rounded-toolbar" md-whiteframe="1">
+    <div class="md-toolbar-tools"> 
+        <div class="il-search-bar" layout="row" flex="none"> 
+            <md-input-container class="md-block" md-no-float>
+                <md-icon class="il-search-icon" >search</md-icon>
+                <input id="search-input" type="text" ng-model="filterbar.appliedFilters.search" placeholder="Search" ng-change="filterbar.onSearchInput()" ng-model-options="{updateOn: 'keyup'}" update-on-enter />
+            </md-input-container>
+        </div>
+
+        <!-- <div layout="column">   -->
+            <!-- <div layout="row">
+                <div id="small" md-colors="{color: 'accent'}">Filters</div>
+            </div>     -->
+            <div layout="row" flex>
+                <!-- Filters -->
+                <md-input-container class="il-filter-bar-filter" 
+                                    md-no-float 
+                                    hide-xs
+                                    layout-margin
+                                    ng-repeat="filter in filterbar.filters"
+                                    md-truncate>
+                    <md-select ng-model="filterbar.appliedFilters.filters[filter.column]"
+                            ng-change="filterbar.onFilterSelected()"
+                            placeholder="{{filter.placeholder}}"
+                            multiple> 
+                        <!-- TODO: When supporting searching within box -->
+                        <!-- <md-select-header>
+                        <input ng-model="filterbar.searchTerm"
+                                type="search"
+                                placeholder="Search {{filter.name}}s"
+                                class="md-text">
+                        </md-select-header> -->
+                        <md-optgroup label="{{filter.column}}">
+                            <!-- TODO: When supporting searching within box -->
+                            <!-- <md-option ng-value="option" ng-repeat="option in filter.options |
+                                filter:filterbar.searchTerm">{{option}}</md-option> -->
+                            <md-option ng-value="option.value" ng-repeat="option in filter.values">{{option.name}}</md-option> 
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+                <!-- Filters -->
+
+                <md-button class="md-accent" ng-click="filterbar.clear()" hide-xs>
+                    Clear
+                </md-button>
+                <span flex></span>
+                <md-button class="md-icon-button" hide-gt-xs>
+                    <md-icon id="il-databar-button-override">more_vert</md-icon>
+                </md-button>
+            </div>
+        <!-- </div> -->
+    </div>
+</div>

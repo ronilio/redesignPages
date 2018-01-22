@@ -1,0 +1,86 @@
+<div layout="column" ng-if="assetsTab.viewState == 1 && assetsTab.allocations.length > 0" layout-fill>
+    <div layout="row" layout-wrap layout-fill>
+        <il-card ng-repeat="allocation in assetsTab.allocations | orderBy: ['-isTracked']"
+            allocation="allocation"
+            icon-actions="assetsTab.actions" 
+            flex-xs="100" flex-gt-xs="50" flex-gt-md="33" flex-xl="25">
+        </il-card>
+
+        <div layout="row" layout-align="center end" flex="100">
+            <cl-paging cl-pages="assetsTab.pages" cl-steps="6" cl-page-changed="assetsTab.onNewPage" cl-align="start start" cl-current-page="assetsTab.currentPage"></cl-paging>
+        </div> 
+    </div> 
+</div>
+
+<div layout-wrap ng-if="assetsTab.viewState == 0 && assetsTab.allocations.length > 0">
+    <md-card>    
+        <md-table-container>
+            <table md-table md-row-select ng-model="assetsTab.selectedItems">
+                <thead md-head>
+                    <tr md-row>
+                        <th ng-repeat="(column, config) in assetsTab.columns track by column" md-column>
+                            {{ config.name.toUpperCase()}}
+                        </th>
+                        <th ng-if="assetsTab.ROLES.SAD || assetsTab.ROLES.HAD || assetsTab.ROLES.HCL" md-column>
+                            <span style="padding-right: 10%">ACTIONS</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody md-body>
+                    <tr md-row md-auto-select md-select="item" md-select-id="{{item.id}}" md-on-select="assetsTab.getAssetDetails" ng-repeat="item in assetsTab.allocations">
+                        <td ng-repeat="(column, config) in assetsTab.columns" md-cell>
+                            <span ng-if="!config.hideColumn(item, column) && !config.isDate && !config.getValue">
+                            {{
+                                config.columnAlias ?
+                                (config.displayProperty ? item[config.columnAlias][config.displayProperty] || '-' : item[config.columnAlias].toString() || '-'):
+                                (config.displayProperty ? item[column][config.displayProperty] || '-' : item[column].toString() || '-')
+                            }}
+                            </span>
+                            <span ng-if="!config.hideColumn(item, column) && config.isDate && !config.getValue">
+                                {{
+                                    config.columnAlias ?
+                                    (config.displayProperty ? item[config.columnAlias][config.displayProperty] || '-' : item[config.columnAlias].toString() || '-'):
+                                    (config.displayProperty ? item[column][config.displayProperty] || '-' : item[column].toString() || '-')
+                                    | date:'MM/dd/yyyy h:mma'
+                                }}
+                            </span>
+                            <span ng-if="!config.hideColumn(item, column) && config.isDate && config.getValue">
+                                {{
+                                    config.columnAlias ?
+                                    (config.displayProperty ? item[config.columnAlias][config.displayProperty] || '-' : item[config.columnAlias].toString() || '-'):
+                                    (config.displayProperty ? item[column][config.displayProperty] || '-' : config.getValue(item, column).toString() || '-')
+                                    | date:'MM/dd/yyyy h:mma'
+                                }}
+                            </span>
+                            <span ng-if="!config.isDate && config.getValue">
+                                {{
+                                    config.getValue(item, column)
+                                }}
+                            </span>
+                            <span ng-if="config.hideColumn(item, column) && !config.getValue">-</span>
+                        </td>
+                        <td md-cell layout="row" layout-align="end center">
+                            <md-button ng-if="!action.shouldBeHidden(item)" ng-disabled="action.shouldBeDisabled(item)" class="md-icon-button table-action-button"
+                                ng-click="action.callback(item)" ng-repeat="action in actions">
+                                <md-tooltip>{{action.title}}</md-tooltip>
+                                <i class="zmdi zmdi-hc-2x gray" ng-style="{ color: action.shouldBeDisabled(item) ? 'gray':action.color }" ng-class="action.icon"></i>
+                            </md-button>
+                            <md-button class="md-icon-button table-action-button" ng-if="assetsTab.ROLES.SAD || assetsTab.ROLES.HAD || assetsTab.ROLES.HCL" ng-click="assetsTab.edit(item)" ng-hide="item.isDeleted" title="Edit">
+                                <md-tooltip>Edit</md-tooltip>
+                                <md-icon>mode_edit</md-icon>
+                            </md-button>
+                            <md-button class="md-icon-button table-action-button" ng-if="assetsTab.ROLES.SAD || assetsTab.ROLES.HAD || assetsTab.ROLES.HCL" ng-hide="item.isDeleted" ng-click="assetsTab.discard(item)" title="Delete">
+                                <md-tooltip>Delete</md-tooltip>
+                                <md-icon>delete</md-icon>>
+                            </md-button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </md-table-container>
+        <!-- <md-table-pagination md-limit="query.limit" md-limit-options="limitOptions" md-page="query.page" md-total="{{desserts.count}}" md-page-select="options.pageSelect" md-boundary-links="options.boundaryLinks" md-on-paginate="logPagination"></md-table-pagination> -->
+    </md-card>
+</div>
+
+<div ng-if="assetsTab.allocations.length == 0 && !assetsTab.filtersApplied" class="noAssetsRegisteredText">No assets registered</div>
+<div ng-if="assetsTab.allocations.length == 0 && assetsTab.filtersApplied" class="noAssetsRegisteredText">Your search returned no results</div>

@@ -1,0 +1,101 @@
+<!-- All dialogs require developer to pass controllerAs: 'modal' when showing dialog -->
+
+<md-dialog>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Asset Allocation</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="modal.close()">
+                    <md-icon aria-label="Close Dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Area Details</div>
+                 
+                        <div layout="row">
+                            <md-input-container flex>
+                                <label>Area Name</label>
+                                <input ng-model="modal.area.name" autofocus>
+                            </md-input-container>
+                        </div>
+             
+                        <div layout="column" layout-gt-sm="row">
+                            <md-input-container flex="50">
+                                <label>Parent</label>
+                                <input ng-model="modal.area.parent">
+                            </md-input-container> 
+                            <md-input-container flex="50">
+                                <label>Default Status for Assets</label>
+                                <md-select ng-model="modal.area.defaultStatus">
+                                </md-select>
+                            </md-input-container>
+                        </div>
+                
+                        <div layout="row" layout-align="center center">
+                            <md-input-container flex> 
+                                <label>Description</label>
+                                <input ng-model="modal.area.description">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+
+                <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Area Settings</div>
+                
+                        <md-checkbox ng-model="modal.area.settings.notfications">Enable Notifications</md-checkbox>
+                        <md-checkbox ng-model="modal.area.settings.restricted">Restricted Area</md-checkbox>
+                    
+                        <div layout-gt-sm="row" layout-align="center center">
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-checkbox ng-model="modal.area.settings.automaticDischarge.enabled" flex-gt-sm="50">Automatic Discharge</md-checkbox>
+                            </div>
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-input-container>
+                                    <label>Discharge Delay (s)</label>
+                                    <md-select ng-model="modal.area.settings.automaticDischarge.delay" ng-enabled="modal.area.settings.automaticDischarge.enabled">
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div layout-gt-sm="row" layout-align-gt-sm="start center">
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-checkbox ng-model="modal.area.settings.alarm.enabled" flex-gt-sm="50">Activate Alarm</md-checkbox>
+                            </div>
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-input-container>
+                                    <label>Alarm Delay (s)</label>
+                                    <md-select ng-model="modal.area.settings.alarm.delay" ng-enabled="modal.area.settings.alarm.enabled">
+                                    </md-select>
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <!-- TODO: Add Color -->
+                    </div>
+                </div>
+
+                <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Asset Relationships</div>
+                    
+                    </div>
+                    <!-- TODO: Add Table -->
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-accent" ng-click="modal.close()">
+                Discard
+            </md-button>
+            <md-button class="md-primary" ng-click="modal.save()" ng-disabled="modal.saveDisabled">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </md-dialog>
+    

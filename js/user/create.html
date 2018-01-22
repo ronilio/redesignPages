@@ -1,0 +1,121 @@
+<md-dialog flex="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Gateway Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <form name="form">
+        <md-dialog-content class="md-dialog-content">
+            <div layout="column">
+
+                <md-input-container>
+                    <label>First Name</label>
+                    <input name="firstName" ng-model="model.firstName" required md-maxlength="60" minlength="1">
+                    <div ng-if="form.firstName.$dirty && form.firstName.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.firstName.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.firstName.$error['minlength']">Please add more characters!</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Last Name</label>
+                    <input name="lastName" ng-model="model.lastName" required md-maxlength="60" minlength="1">
+                    <div ng-if="form.lastName.$dirty && form.lastName.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.lastName.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.lastName.$error['minlength']">Please add more characters!</div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>Email</label>
+                    <input name="email" type="email" ng-model="model.email" ng-disabled="isEditMode" required md-maxlength="60" minlength="1" lowercase-input>
+                    <div ng-if="form.email.$dirty && form.email.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.email.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.email.$error['minlength']">Please add more characters!</div>
+                        <div class="red-alert" ng-if="form.email.$error['email']">Please enter a valid email address</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['User.email']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-autocomplete force-select
+                        md-no-cache="true"
+                        md-selected-item="model.role"
+                        md-item-text="option.name"
+                        md-min-length="0"
+                        md-floating-label="Role"
+                        md-search-text="searchTextRole"
+                        md-items="option in querySearch(searchTextRole, formOptions.roles, 'name')"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true"
+                        required="true">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No role found
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-autocomplete force-select
+                        ng-if="(!PERMISSIONS && model.hospital.components.ptrak) || PERMISSIONS.ptrak"
+                        md-no-cache="true"
+                        md-selected-item="model.position"
+                        md-search-text="searchTextPosition"
+                        md-items="option in querySearch(searchTextPosition, formOptions.positions, 'name')"
+                        md-item-text="option.name"
+                        md-min-length="0"
+                        md-floating-label="Position"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No position found
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-autocomplete force-select
+                        ng-if="(!PERMISSIONS && model.hospital.components.ptrak) || PERMISSIONS.ptrak"
+                        md-no-cache="true"
+                        md-selected-item="model.specialization"
+                        md-search-text="searchTextSpecialisation"
+                        md-items="option in querySearch(searchTextSpecialisation, formOptions.specialisations, 'name')"
+                        md-item-text="option.name"
+                        md-min-length="0"
+                        md-floating-label="Specialisation"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No specialisation found
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-checkbox class="checkbox-display" ng-if="!model.isActive && !model.hasPasswordSet" ng-model="model.sendInvitation">
+                    Send activation email
+                </md-checkbox>
+
+                <md-checkbox class="checkbox-display" ng-model="model.checkInactivity">
+                    Expire token
+                </md-checkbox>
+
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-secondary" ng-if="isEditMode && model.isActive" ng-click="resetUserPassword(model)"> Reset Password</md-button>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="save()"> Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

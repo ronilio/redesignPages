@@ -1,0 +1,34 @@
+<md-dialog flex="30" flex-md="40">
+    <ng-form name="form">
+        <div layout="column" layout-padding layout-margin>
+            <md-dialog-content layout-padding>
+                <div layout="row" layout-wrap>
+                    <md-autocomplete force-select
+                            flex="100"
+                            layout-align="center none"
+                            md-no-cache="true"
+                            md-selected-item="model.room"
+                            md-search-text="searchText"
+                            md-items="option in querySearch(searchText)"
+                            md-item-text="option.name"
+                            md-min-length="0"
+                            md-floating-label="Area"
+                            md-select-on-match="true"
+                            md-match-case-insensitive="true"
+                            required="true">
+                        <md-item-template>
+                            <span md-highlight-flags="^i">{{option.name}}</span>
+                        </md-item-template>
+                        <md-not-found>
+                            No rooms found
+                        </md-not-found>
+                    </md-autocomplete>
+                </div>
+            </md-dialog-content>
+        </div>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="proceed()">Next</md-button>
+        </md-dialog-actions>
+    </ng-form>
+</md-dialog>

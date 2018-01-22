@@ -1,0 +1,257 @@
+<md-dialog flex="50" class="patient-form">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Patient Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="modal.close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <div layout="row" class="is-active-container">
+        <md-progress-linear ng-show="loadingBeacon" md-mode="indeterminate"></md-progress-linear>
+    </div>
+    <form name="form">
+        <md-dialog-content class="md-dialog-content">
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title" md-colors="{color: 'primary'}">Patient Information</div>
+                    <div layout="column" layout-gt-sm="row">
+                        <md-autocomplete force-select
+                                        style="padding-right:10px"
+                                        enter-handle="searchBeaconForQRCode(searchTextBeacon)"
+                                        flex="50"
+                                        md-no-cache="true"
+                                        md-selected-item="model.beacon"
+                                        md-search-text="searchTextBeacon"
+                                        md-items="option in querySearch(searchTextBeacon, beacons, 'name')"
+                                        md-item-text="option.name"
+                                        md-min-length="0"
+                                        md-floating-label="Select beacon"
+                                        md-select-on-match="true"
+                                        md-match-case-insensitive="true"
+                                        md-input-id="beaconAutoCompleteId"
+                                        md-autofocus
+                                        ng-blur="onBlur()">
+                            <md-item-template>
+                                <span md-highlight-flags="^i">{{option.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No beacons found
+                            </md-not-found>
+                            <div class="red-alert" ng-if="validationErrors" role="alert">
+                                <div ng-repeat="errorText in validationErrors['Allocation.beacon']">
+                                    {{ errorText }}
+                                </div>
+                            </div>
+                        </md-autocomplete>
+
+                        <md-input-container flex="50" style="padding-left:10px">
+                            <label>Patient ID</label>
+                            <input name="patientId" ng-model="model.name" required md-maxlength="10" minlength="3">
+
+                            <div ng-if="form.patientId.$dirty && form.patientId.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.patientId.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.patientId.$error['minlength']">Please add more characters!</div>
+                            </div>
+                            <div class="red-alert" ng-if="validationErrors" role="alert">
+                                <div ng-repeat="errorText in validationErrors['Allocation.patientID']">
+                                    {{ errorText }}
+                                </div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <div layout="column" layout-gt-sm="row">
+                        <md-input-container flex="50" style="padding-right:10px">
+                            <label>Patient First Name</label>
+                            <input name="patientFirstName" ng-model="model.meta.patientFirstName" required md-maxlength="45"
+                                minlength="3">
+
+                            <div ng-if="form.patientFirstName.$dirty && form.patientFirstName.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.patientFirstName.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.patientFirstName.$error['minlength']">Please add more characters!</div>
+                            </div>
+                        </md-input-container>
+
+                        <md-input-container flex="50" style="padding-left:10px">
+                            <label>Patient Last Name</label>
+                            <input name="patientLastName" ng-model="model.meta.patientLastName" required md-maxlength="45"
+                                minlength="3">
+
+                            <div ng-if="form.patientLastName.$dirty && form.patientLastName.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.patientLastName.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.patientLastName.$error['minlength']">Please add more characters!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title" md-colors="{color: 'primary'}">Patient Description</div>
+
+                    <!-- TODO: needs support -->
+                    <div layout="column" layout-gt-sm="row">
+                        <md-input-container flex-gt-sm="33">
+                            <label>Race</label>
+                            <md-select ng-model="">
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="33">
+                            <label>Stature</label>
+                            <md-select ng-model="">
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="33">
+                            <label>Hair Color</label>
+                            <md-select ng-model="">
+                            </md-select>
+                        </md-input-container>
+                    </div>
+
+                    <div layout="row">
+                        <md-input-container flex="100">
+                            <label>Description</label>
+                            <textarea name="description" ng-model="model.meta.assetDescription" md-maxlength="90" minlength="1"></textarea>
+                
+                            <div ng-if="form.description.$dirty && form.description.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.description.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.description.$error['minlength']">Please add more characters!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+
+                    <!-- TODO: needs support -->
+                    <div layout="row">
+                        <md-checkbox ng-model="" ng-true-value="behavioral" ng-false-value="default">Behavioral Patient</md-checkbox>
+                    </div>
+                </div>
+            </div>
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title" md-colors="{color: 'primary'}">Procedure Information</div>
+                    <div layout="column" layout-gt-sm="row">
+                            <md-autocomplete force-select
+                                        flex-gt-sm="50"
+                                        style="padding-right:10px"
+                                        md-no-cache="true"
+                                        md-selected-item="model.meta.surgeryType"
+                                        md-search-text="searchTextST"
+                                        md-items="option in querySearch(searchTextST, surgeryTypes, 'name')"
+                                        md-item-text="option.name"
+                                        md-min-length="0"
+                                        md-floating-label="Procedure"
+                                        md-select-on-match="true"
+                                        md-match-case-insensitive="true">
+                            <md-item-template>
+                                <span md-highlight-flags="^i">{{option.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No procedures found
+                            </md-not-found>
+                        </md-autocomplete>
+                        <md-input-container flex-gt-sm="50">
+                            <label>Procedure Date</label>
+                            <input type="datetime-local" id="exampleInput" name="input" ng-model="model.meta.surgeryDateTime" placeholder="yyyy-MM-ddTHH:mm:ss" style="color: #000"
+                                ng-max="{{maxDatetimeLocal | date: 'yyyy-MM-ddTHH:mm:ss'}}"/>
+                            <div ng-if="form.input.$dirty && form.input.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.input.$error['max']">The year must have less than 5 digits</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column" layout-gt-sm="row">
+                        <md-autocomplete force-select
+                                    flex-gt-sm="50"
+                                    md-no-cache="true"
+                                    md-selected-item="model.meta.doctor"
+                                    md-search-text="searchTextDoc"
+                                    md-items="option in querySearch(searchTextDoc, doctors, 'name')"
+                                    md-item-text="option.name"
+                                    md-min-length="0"
+                                    md-floating-label="Physician"
+                                    md-select-on-match="true"
+                                    md-match-case-insensitive="true">
+                            <md-item-template>
+                                <span md-highlight-flags="^i">{{option.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No physician found
+                            </md-not-found>
+                        </md-autocomplete>
+                        <md-input-container flex-gt-sm="50">
+                            <label>Nurse</label>
+                            <input name="nurse" ng-model="model.meta.nurseName" md-maxlength="255" minlength="1">
+                            <div ng-if="form.nurse.$dirty && form.nurse.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.nurse.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.nurse.$error['minlength']">Please add more characters!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                    <div layout="column" layout-gt-sm="row">
+                        <md-autocomplete force-select
+                                flex="50"
+                                style="padding-right:10px"
+                                md-no-cache="true"
+                                md-selected-item="model.meta.anesthesiologist"
+                                md-search-text="searchTextAn"
+                                md-items="option in querySearch(searchTextAn, anesthesiologists, 'name')"
+                                md-item-text="option.name"
+                                md-min-length="0"
+                                md-floating-label="Anesthesiologist"
+                                md-select-on-match="true"
+                                md-match-case-insensitive="true">
+                            <md-item-template>
+                                <span md-highlight-flags="^i">{{option.name}}</span>
+                            </md-item-template>
+                            <md-not-found>
+                                No anesthesiologists found
+                            </md-not-found>
+                        </md-autocomplete>
+                    </div>
+                </div>
+            </div>
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title" md-colors="{color: 'primary'}">Contact Information</div>
+
+                    <div layout="row">
+                        <md-chips
+                                class="dashboard.md-chips"
+                                style="box-shadow: 0 0px !important;"
+                                flex="100"
+                                ng-model="model.meta.phoneNumbers"
+                                placeholder="Type and press enter to add phone number(s) associated with the patient"
+                                delete-button-label="Remove phone number"
+                                delete-hint="Press delete to remove phone number"
+                                readonly="true"
+                                md-removable="true"
+                                secondary-placeholder="Type and press enter to add phone number(s) associated with the patient">
+                            <md-chip-template>
+                                    {{$chip}}
+                            </md-chip-template>
+                        </md-chips>
+                        <md-input-container>
+                            <md-select ng-model="countryCode">
+                                <md-option ng-repeat="code in countryCodes" ng-value="code">
+                                    <div flex layout="row" layout-align="space-around">
+                                        <div style="margin:5px;"  class="intl-flag" ng-class="code[1]"> &nbsp</div>
+                                        <div>{{code[1].toUpperCase()}}({{code[2]}})</div>
+                                    </div>
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container>
+                            <input ng-keypress="$event.keyCode == 13 && onAddPhoneNumber();" type="text" ng-model="phoneNumber" placeholder="Phone Number">
+                            <div class="hint">Type and press enter to add phone number(s) associated with the patient</div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions layout="row">
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="save()">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

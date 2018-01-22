@@ -1,0 +1,21 @@
+<md-tabs id="il-background-override" md-dynamic-height md-border-bottom> 
+    <md-tab label="Survey Management">
+        <md-content>
+            <crud-list
+                resource="survey"
+                columns="columns"
+                filter-config="filterConfig"
+                create-form-url="js/survey/create.html"
+                form-options="formOptions"
+                actions="actions"
+                pre-action-hook="preActionHook"
+                cannot-delete-item-cb="cannotDeleteItem"
+            ></crud-list>
+        </md-content>
+    </md-tab>
+    <md-tab label="Survey Results">
+        <md-content>
+            <div ng-include="'js/survey/survey-results.html'" layout-margin></div>
+        </md-content>
+    </md-tab>
+</md-tabs>

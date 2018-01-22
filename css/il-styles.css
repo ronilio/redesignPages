@@ -1,0 +1,99 @@
+.il-rounded-toolbar {
+    border-radius: 2px;
+}
+
+.il-scrollable {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.il-search-bar {
+    min-height: 64px;
+    max-height: 64px; 
+    margin: 16px 8px 16px 8px;
+}
+
+/* I don't like that this is 7px but there is clearly something */
+/* throwing off alignment with search bar on md-toolbar */
+/* could be line height related. */
+.il-filter-bar-filter {
+    color:black;
+    padding-top: 10px;
+}
+
+.il-search-icon {
+    color: #757575
+}
+
+.il-sidenav-selected-index {
+    background: #ECEFF1;
+}
+
+.il-toolbar-icon-size {
+    font-size: 24px;
+}
+
+.il-toggle-button-group {
+    background: white;
+    height: 48px;
+    border-bottom: 1px solid #E0E0E0;
+    outline: none;
+}
+
+.il-side-filter {
+    background: white;
+    min-width: 256px;
+    max-width: 256px;
+}
+
+.il-databar {
+    background: white;
+    border-radius: 3px;
+}
+
+.il-databar-content {
+    padding: 8px;
+}
+
+.il-databar-headline {
+    /* color: rgb(127, 145, 162); */
+    color: #757575;
+}
+
+.il-databar-content-title {
+    /* color: #8CA0B3; */
+    color: #757575;
+    padding: 0 8px 0 8px;
+}
+
+.il-databar-content-divider {
+    margin: 0 16px 0 0;
+}
+
+#il-databar-button-override {
+    color: #757575;
+    font-size: 24px;
+}
+
+#il-background-override {
+    background: white;
+}
+
+#il-toggle-button {
+    height: 48px;
+    width: 48px;
+}
+
+#il-toggle-button-icon {
+    height: auto;
+    width: auto;
+    font-size: 32px;
+}
+
+.md-button.md-small {
+    line-height: 20px;
+    min-height: 20px;
+    font-size: 10px;
+    margin: 0;
+    min-width: 1%;
+}

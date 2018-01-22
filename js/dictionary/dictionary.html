@@ -1,0 +1,89 @@
+<md-content layout="row" class="dashboard header-margin" ng-if="PERMISSIONS.atrak" layout-wrap>
+    <md-toolbar>
+        <div class="dictionaryToolbar md-toolbar-tools">
+            <span class="dictionaryToolbarText">Asset Type Management</span>
+        </div>
+    </md-toolbar>
+</md-content>
+
+<crud-list
+        ng-if="PERMISSIONS.atrak"
+        style="margin: auto;"
+        resource="dictionary/asset/type"
+        filter-config="assetFilterConfig"
+        columns="assetColumns"
+        create-form-url="js/dictionary/asset.html"
+        form-options="assetFormOptions"
+        actions="actions"
+        pre-action-hook="preActionHookAssetType"
+></crud-list>
+
+
+<md-divider class="dividerMargin" ng-if="PERMISSIONS.atrak"></md-divider>
+
+<md-content layout="row" class="dashboard header-margin" ng-if="PERMISSIONS.ptrak" layout-wrap>
+    <md-toolbar>
+        <div class="dictionaryToolbar md-toolbar-tools">
+            <span class="dictionaryToolbarText">Procedure Type Management</span>
+        </div>
+    </md-toolbar>
+</md-content>
+
+<crud-list
+        ng-if="PERMISSIONS.ptrak"
+        style="margin: auto;"
+        resource="dictionary/SURGERY"
+        filter-config="surgeryTypeFilterConfig"
+        columns="surgeryTypeColumns"
+        create-form-url="js/dictionary/surgeryType.html"
+        form-options="surgeryTypeFormOptions"
+        actions="actions"
+        pre-action-hook="preActionHookSurgeryType"
+        force-get-object="true"
+></crud-list>
+
+<md-divider class="dividerMargin" ng-if="PERMISSIONS.ptrak"></md-divider>
+
+<md-content layout="row" class="dashboard header-margin" ng-if="PERMISSIONS.ptrak" layout-wrap>
+    <md-toolbar>
+        <div class="dictionaryToolbar md-toolbar-tools">
+            <span class="dictionaryToolbarText">Medical Specialisation Management</span>
+        </div>
+    </md-toolbar>
+</md-content>
+
+<crud-list
+        ng-if="PERMISSIONS.ptrak"
+        style="margin: auto;"
+        resource="dictionary/SPECIALIZATION"
+        filter-config="medSpecFilterConfig"
+        columns="medSpecColumns"
+        create-form-url="js/dictionary/medSpec.html"
+        form-options="medSpecFormOptions"
+        actions="actions"
+        pre-action-hook="preActionHookMedSpec"
+        force-get-object="true"
+></crud-list>
+
+<md-divider class="dividerMargin" ng-if="PERMISSIONS.ptrak"></md-divider>
+
+<md-content layout="row" class="dashboard header-margin" ng-if="PERMISSIONS.ptrak" layout-wrap>
+    <md-toolbar>
+        <div class="dictionaryToolbar md-toolbar-tools">
+            <span class="dictionaryToolbarText">Position Management</span>
+        </div>
+    </md-toolbar>
+</md-content>
+
+<crud-list
+        ng-if="PERMISSIONS.ptrak"
+        style="margin: auto;"
+        resource="dictionary/POSITION"
+        filter-config="positionFilterConfig"
+        columns="positionColumns"
+        create-form-url="js/dictionary/position.html"
+        form-options="positionFormOptions"
+        actions="actions"
+        pre-action-hook="preActionHookPosition"
+        force-get-object="true"
+></crud-list>

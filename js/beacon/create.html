@@ -1,0 +1,46 @@
+<md-dialog flex="50" flex-md="60" flex-sm="100" flex-xs="100">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Beacon Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <form name="form">
+        <md-dialog-content class="md-dialog-content">
+            <div layout="column">
+                <div layout="row" layout-wrap>
+                    <md-input-container flex="auto">
+                        <label>Select protocol</label>
+                        <md-select ng-model="model.beaconType">
+                            <md-option disabled ng-if="beaconTypes.length == 0">No items available</md-option>
+                            <md-option ng-repeat="beaconType in beaconTypes" ng-value="beaconType">
+                                {{beaconType}}
+                            </md-option>
+                        </md-select>
+                    </md-input-container>
+                </div>
+
+                <div ng-if="beaconTypes.length != 0">
+                    <div class="ng-cloak" ng-if="model.beaconType.toLowerCase() == 'ibeacon'" ng-include="'js/beacon/ibeacon.html'"></div>
+                    <div class="ng-cloak" ng-if="model.beaconType.toLowerCase() == 'nearable'" ng-include="'js/beacon/nearable.html'"></div>
+                </div>
+
+                <md-input-container ng-if="validationErrors">
+                    <div class="red-alert" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Beacon']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid || beaconTypes.indexOf(model.beaconType) == -1" ng-click="save()"> Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

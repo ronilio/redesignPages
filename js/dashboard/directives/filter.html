@@ -1,0 +1,62 @@
+<div class="filter-area md-whiteframe" layout="column" layout-fill>
+    <div layout="row">
+        <span class="filterPadding">FILTER</span>
+        <span flex></span>
+        <md-button class="filter-button reset" ng-click="resetFilters()">
+            Reset
+        </md-button>
+        <md-button class="filter-button" ng-click="applyFilters()">
+            Apply
+        </md-button>
+    </div>
+    <div class="filters" layout="row" flex layout-wrap>
+        <md-input-container flex="40">
+            <label>by Location</label>
+            <md-select ng-model="filter.room" multiple>
+                <md-option disabled ng-if="filters.rooms.length == 0">No items available</md-option>
+                <md-option ng-repeat="room in filters.rooms track by room.id" value="{{room}}">
+                    <span ng-if="room.parent.name">{{room.parent.name + ' - '}}</span>
+                    {{room.name}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container flex="auto" ng-if="type=='patient'">
+            <label>by Physician Name</label>
+            <md-select ng-model="filter.doctor">
+                <md-option ng-repeat="doctor in filters.doctors" value="{{doctor}}">
+                    {{doctor.name}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container flex="20" ng-if="type=='asset'">
+            <label>by Type</label>
+            <md-select ng-model="filter.assetTypeId" md-on-close="reloadStatuses(filter.assetTypeId)">
+                <md-option disabled ng-if="filters.types.length == 0">No items available</md-option>
+                <md-option ng-repeat="type in filters.types track by type.id" value="{{type.id}}">
+                    {{type.name}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <md-input-container flex="20" ng-if="type=='asset'">
+            <label>by Status</label>
+            <md-select ng-model="filter.status" ng-if="showStatuses" multiple>
+                <md-option disabled ng-if="filters.statuses.length == 0">No items available</md-option>
+                <md-option ng-repeat="status in filters.statuses track by status.status || status" ng-value="status.status || status">
+                    {{status.status || status}}
+                </md-option>
+            </md-select>
+        </md-input-container>
+
+        <div flex="35" flex-md="40" flex-sm="100" class="date-picker-filter" ng-if="type=='patient'">
+            <md-datepicker-custom ng-model="filter.entry" md-placeholder="In" layout="row"></md-datepicker-custom>
+        </div>
+
+        <div flex="20" flex-md="40" flex-sm="100" class="date-picker-filter" ng-if="type=='asset'">
+            <md-datepicker-custom ng-model="filter.entry" md-placeholder="by Entry" layout="row"></md-datepicker-custom>
+        </div>
+
+    </div>
+</div>

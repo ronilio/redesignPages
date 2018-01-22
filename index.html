@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html ng-app="ilWebClient">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="format-detection" content="telephone=no">
+    <title ng-cloak>{{getTitle()}}</title>
+
+    <!--   Keeping this here for now. These are css used by new components   -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="./css/il-styles.css" rel="stylesheet">
+
+    
+
+
+    
+
+
+    <!-- inject:js -->
+<script src="js/_dist-lib-min.js"></script>
+<script src="https://cdn.ravenjs.com/3.5.1/angular/raven.min.js"></script>
+<script>Raven.config("https://012bc883ad914c1388930b1565a16871@app.getsentry.com/94317").install();</script>
+
+<script src="js/dist-min.js"></script>
+ <!-- endinject -->
+</head>
+<body layout="row">
+<ui-view layout="column" flex id="content" role="main" name="main"></ui-view>
+</body>
+</html>

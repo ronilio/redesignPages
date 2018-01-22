@@ -1,0 +1,15 @@
+<div style="height: {{height}}px;" class="tg-thermometer" ng-class="size">
+    <div class="draw-b"></div>
+    <div class="meter">
+        <!--<div class="statistics">
+            <div class="percent percent-a">100&#176;</div>
+            <div class="percent percent-e">0&#176;</div>
+        </div>-->
+        <div style="height: {{percent}}%" class="mercury">
+            <div class="percent-current">{{percent}}&#176;</div>
+            <div class="mask">
+                <div class="bg-color" style="height: calc({{height}}px - 57px);"></div>
+            </div>
+        </div>
+    </div>
+</div>

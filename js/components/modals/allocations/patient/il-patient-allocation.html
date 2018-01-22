@@ -1,0 +1,136 @@
+<!-- All dialogs require developer to pass controllerAs: 'modal' when showing dialog -->
+
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Patient Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="modal.close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title">Patient Information</div>
+              
+                    <div layout="column" layout-gt-sm="row">
+                        <md-input-container>
+                            <label>Select Beacon</label>
+                            <input ng-model="modal.patient.information.beacon" autofocus>
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="50">
+                            <label>Patient ID</label>
+                            <input ng-model="modal.patient.information.id">
+                        </md-input-container>
+                    </div>
+                    <div layout="column" layout-gt-sm="row">
+                        <md-input-container flex-gt-sm="50">
+                            <label>Patient First Name</label>
+                            <input ng-model="modal.patient.information.firstName">
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="50">
+                            <label>Patient Last Name</label>
+                            <input ng-model="modal.patient.information.lastName">
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+
+            <div layout="row">
+                <div layout="column" flex>
+                    <div class="md-title">Patient Description</div>
+
+                    <div layout="column" layout-gt-sm="row">
+                        <md-input-container flex-gt-sm="33">
+                            <label>Race</label>
+                            <md-select ng-model="modal.patient.description.race">
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="33">
+                            <label>Stature</label>
+                            <md-select ng-model="modal.patient.description.stature">
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container flex-gt-sm="33">
+                            <label>Hair Color</label>
+                            <md-select ng-model="modal.patient.description.hairColor">
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-input-container flex> 
+                            <label>Description</label>
+                            <input ng-model="modal.patient.description.description">
+                        </md-input-container>
+                    </div>
+                    <div layout="row">
+                        <md-checkbox ng-model="modal.patient.description.type" ng-true-value="behavioral" ng-false-value="default">Behavioral Patient</md-checkbox>
+                    </div>
+                </div>
+            </div>
+
+            <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Procedure Information</div>
+                 
+                        <div layout="column" layout-gt-sm="row">
+                            <md-input-container flex-gt-sm="50">
+                                <label>Procedure</label>
+                                <input ng-model="modal.patient.procedure.type">
+                            </md-input-container>
+                            <md-input-container flex-gt-sm="50">
+                                <label>Date</label>
+                                <md-datepicker ng-model="modal.patient.procedure.date" md-hide-icons="calendar"></md-datepicker>
+                            </md-input-container>
+                        </div>
+                        <div layout="column" layout-gt-sm="row">
+                            <md-input-container flex-gt-sm="50">
+                                <label>Physician</label>
+                                <input ng-model="modal.patient.procedure.physician">
+                            </md-input-container>
+                            <md-input-container flex-gt-sm="50">
+                                <label>Nurse</label>
+                                <input ng-model="modal.patient.procedure.nurse">
+                            </md-input-container>
+                        </div>
+                        <div layout="column" layout-gt-sm="row">
+                            <md-input-container flex-gt-sm="50">
+                                <label>Anesthesiologist</label>
+                                <input ng-model="modal.patient.procedure.anesthesiologist">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+
+            <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Contact Information</div>
+
+                        <div layout="row">
+                            <md-input-container md-no-float>
+                                <md-select ng-model="modal.phone.country" placeholder="US">
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container md-no-float> 
+                                <input ng-model="modal.phone.number" placeholder="(555)555-5555">
+                            </md-input-container>
+                        </div>
+                        <div layout="row">
+                            
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <md-button class="md-accent" ng-click="modal.close()">
+            Discard
+        </md-button>
+        <md-button class="md-primary" ng-click="modal.save()" ng-disabled="modal.saveDisabled">
+            Save
+        </md-button>
+    </md-dialog-actions>
+</md-dialog>

@@ -1,0 +1,23 @@
+<div class="md-whiteframe associate-form" layout="row" flex="100">
+    <div flex="50" class="availableBeacons" layout="column" layout-align="center center">
+        <div class="label-available" flex="40"  layout-align="center center" layout="row" ng-style="{'color': theme.color3}">
+            <div flex="70">Free</div>
+            <div flex="30">
+                <i class="zmdi zmdi-portable-wifi zmdi-hc-2x" ng-style="{'color': theme.color3}"></i>
+            </div>
+        </div>
+        <div class="label-nr-available" flex layout="row">
+            <div class="available-beacons-count" ng-show="freeBeaconCount != ''" ng-style="{'color': theme.color3}">{{freeBeaconCount}}</div>
+            <div class="available-beacons-count" ng-show="freeBeaconCount == ''">
+                <i class="zmdi zmdi-rotate-right zmdi-hc-spin" ng-style="{'color': theme.color3}"></i>
+            </div>
+        </div>
+    </div>
+    <div flex="50" layout="row" class="allocate">
+        <md-button flex="100" class="inventory addBeaconsBtn"  ng-style="{'background-color': theme.color3}" ng-disabled="freeBeaconCount == 0" ng-class="{'disableBtn' : freeBeaconCount == 0}" layout-align="center center" ng-click="addCallback(type)">
+            <div class="allocateText">allocate</div>
+            <i style="font-size: 6em" class="zmdi zmdi-plus zmdi-hc-5x white"></i>
+        </md-button>
+
+    </div>
+</div>

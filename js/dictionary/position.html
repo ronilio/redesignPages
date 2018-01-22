@@ -1,0 +1,31 @@
+<md-dialog flex="40" layout-padding>
+    <form name="form">
+        <md-dialog-content>
+            <div layout="column" layout-padding layout-margin>
+
+                <md-input-container>
+                    <label>Name</label>
+                    <input name="name" ng-model="model.name" required md-maxlength="60" minlength="1">
+                    <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['dictionary']">
+                            {{ errorText }}
+                        </div>
+                        <div ng-repeat="errorText in validationErrors['Name']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+            </div>
+            <div class="dictionaries-disclaimer" ng-show="isEditMode">{{::disclaimer}}</div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="save()">Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

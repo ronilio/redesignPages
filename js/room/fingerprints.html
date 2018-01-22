@@ -1,0 +1,38 @@
+<md-dialog flex="100">
+    <ng-form name="form">
+        <div layout="column" layout-padding layout-margin>
+            <md-dialog-content layout-padding>
+                <div layout="row" layout-wrap>
+                    <div ng-repeat="fingerprint in model" style="border-bottom: 1px solid #000000">
+
+                        <md-input-container ng-repeat="(key, value) in fingerprint" ng-if="key != 'id' && key != 'gatewayUuid'">
+                            <label ng-if="key !== 'isValid'">{{key}}</label>
+                            <input type="text" ng-model="value" ng-change="setProperty(fingerprint, key, value)" ng-disabled="!isEnabled(key)" ng-if="key !== 'isValid'">
+                            <div ng-if="key === 'isValid'" style="display: flex; align-items: center;">
+                                <span style="margin-left: 10px;">
+                                    <i class="zmdi zmdi-hc-2x zmdi-check green" ng-if="key === 'isValid' && fingerprint[key] === true"></i>
+                                    <i class="zmdi zmdi-hc-2x zmdi-close red" ng-if="key === 'isValid' && fingerprint[key] === false"></i>
+                                </span>
+                            </div>
+                        </md-input-container>
+
+                        <md-button class="md-icon-button table-action-button" ng-click="update(fingerprint)">
+                            <md-tooltip>Update fingerprint</md-tooltip>
+                            <i class="zmdi zmdi-hc-2x zmdi-floppy green"></i>
+                        </md-button>
+
+                        <md-button class="md-icon-button table-action-button" ng-click="delete(fingerprint)">
+                            <md-tooltip>Delete fingerprint</md-tooltip>
+                            <i class="zmdi zmdi-hc-2x zmdi-delete red"></i>
+                        </md-button>
+
+                    </div>
+                </div>
+            </md-dialog-content>
+        </div>
+
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">OK</md-button>
+        </md-dialog-actions>
+    </ng-form>
+</md-dialog>

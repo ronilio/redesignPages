@@ -1,0 +1,79 @@
+<md-card class="beacon-tile" ng-style="getCardStyle(allocation)">
+    <md-card-title  ng-click="viewCallback(cardType,allocation)">
+        <md-card-title-text layout="row" layout-wrap>
+            <div flex="65" class="card-title" style="width: 110px;word-wrap: break-word;">
+                <md-tooltip ng-if="cardType == 'patient'" md-direction="top">{{getPatientName(allocation) }}</md-tooltip>
+                <div class="md-subhead label" ng-if="cardType == 'asset'">ID</div>
+                <span class="md-headline beacon-name" ng-if="cardType == 'asset'">{{ allocation.allocationName.toUpperCase() }}</span>
+                <div class="md-headline beacon-name patient-name" ng-if="cardType == 'patient'">{{ getPatientName(allocation) }}</div>
+            </div>
+            <div ng-if = "allocation.beaconProcessingType === 'LOCATION'" flex="35" layout-align=" center">
+                <div class="md-subhead label label-in right">IN</div>
+                <div class="md-headline time-in time-in-text" ng-if="::allocation.entryDate">{{ allocation.entryDate | amDateFormat:'MM/DD/YY'  }}</div>
+                <div class="md-headline time-in time-in-text" ng-if="::allocation.entryDate">{{ allocation.entryDate | amDateFormat:'hh:mm A'  }}</div>
+                <div class="md-headline time-in time-in-text" ng-if="!allocation.entryDate">&mdash;</div>
+
+            </div>
+            <div ng-if = "allocation.beaconProcessingType === 'COUNT_MOVEMENT'" flex="35" layout-align=" center">
+                <div class="md-subhead label label-in right">START</div>
+                <div class="md-headline time-in time-in-text" ng-if="::allocation.movementStartDate">{{ allocation.movementStartDate | amDateFormat:'MM/DD/YY'  }}</div>
+                <div class="md-headline time-in time-in-text" ng-if="::allocation.movementStartDate">{{ allocation.movementStartDate | amDateFormat:'hh:mm A'  }}</div>
+                <div class="md-headline time-in time-in-text" ng-if="!allocation.movementStartDate">&mdash;</div>
+
+            </div>
+            <!--<div flex="100" ng-if="::allocation.assetType">
+                <div class="md-subhead label label-in">Type</div>
+                <span class="md-headline meta">{{ ::allocation.assetType }}</span>
+            </div>-->
+            <div flex="100" ng-if="::allocation.allocationStatus">
+                <div class="md-subhead label label-in">Status</div>
+                <span class="md-headline meta">
+                    {{ ::allocation.allocationStatus }}
+                </span>
+                <md-tooltip ng-if="::allocation.allocationStatus">{{ ::allocation.assetType }}</md-tooltip>
+            </div>
+            <div flex="100" >
+                <span >{{allocation.temperature}}</span>
+                <div ng-if = "allocation.beaconProcessingType === 'LOCATION'" class="md-subhead label label-in">{{allocation.locationLabel}}</div>
+                <span ng-if = "allocation.beaconProcessingType === 'LOCATION'" class="md-headline meta">
+                    <span ng-if="!allocation.location">UNKNOWN</span>
+                    <md-tooltip ng-if="allocation.location.area && !allocation.location.room">{{allocation.location.area}}</md-tooltip>
+                    <span class="location-name" ng-if="allocation.location.area && !allocation.location.room">{{allocation.location.area}}</span>
+                    <md-tooltip ng-if="!allocation.location.area && allocation.location.room">{{allocation.location.room}}</md-tooltip>
+                    <span class="location-name" ng-if="!allocation.location.area && allocation.location.room">{{allocation.location.room}}</span>
+                    <md-tooltip ng-if="allocation.location.area && allocation.location.room">{{allocation.location.area}}, {{allocation.location.room}}</md-tooltip>
+                    <span class="location-name" ng-if="allocation.location.area && allocation.location.room">{{allocation.location.area}}, {{allocation.location.room}}</span>
+                </span>
+
+                <div ng-if = "allocation.beaconProcessingType === 'COUNT_MOVEMENT'" class="md-subhead label label-in">Counts</div>
+                <span ng-if = "allocation.beaconProcessingType === 'COUNT_MOVEMENT'" class="md-headline meta">
+                    <span class="location-name">{{allocation.movementCount}}</span>
+                </span>
+            </div>
+        </md-card-title-text>
+        <md-card-title-media>
+        </md-card-title-media>
+    </md-card-title>
+    <md-card-actions ng-if="!ROLES.GPER" layout="row" layout-align="end center" style="margin-top: -5px;">
+        <!--<div flex="100" layout-align="end center" class="action-buttons">-->
+           <!-- <tg-thermometer-vertical percent="{{allocation.temperature | number : 1}}" size="small" height="70"></tg-thermometer-vertical>
+            <md-tooltip>{{allocation.temperature | number : 1}}&#176;</md-tooltip>-->
+            <md-button ng-if="cardType == 'patient' && !allocation.isTracked" class="md-icon-button">
+                <md-tooltip>Allocation is untracked</md-tooltip>
+                <i class="zmdi zmdi-alert-circle-o zmdi-hc-2x zmdi-refresh red"></i>
+            </md-button>
+            <md-button ng-if="cardType == 'patient' && allocation.enableMessage" class="md-icon-button" ng-click="imCallback(cardType, allocation)">
+                <md-tooltip>Message</md-tooltip>
+                <i class="zmdi zmdi-edit zmdi-hc-2x zmdi-comment-text green"></i>
+            </md-button>
+            <md-button class="md-icon-button" ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL" ng-click="editCallback(cardType, allocation)">
+                <md-tooltip>Edit</md-tooltip>
+                <i class="zmdi zmdi-edit zmdi-hc-2x special-blue"></i>
+            </md-button>
+            <md-button class="md-icon-button md-warn" ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL" ng-click="discardCallback(allocation)">
+                <md-tooltip>Discharge</md-tooltip>
+                <i class="zmdi zmdi-delete zmdi-hc-2x red"></i>
+            </md-button>
+        <!--</div>-->
+    </md-card-actions>
+</md-card>

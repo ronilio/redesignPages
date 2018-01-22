@@ -1,0 +1,139 @@
+<md-dialog flex="40">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Gateway Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <form name="form">
+        <md-dialog-content class="md-dialog-content">
+            <div layout="column">
+                <md-input-container>
+                    <label>Name</label>
+                    <input name="name" ng-model="model.name" required md-maxlength="60" minlength="4">
+                    <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.name']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container>
+                    <label>MAC Address</label>
+                    <input name="uuid" ng-model="model.uuid" required md-maxlength="17" minlength="17">
+                    <div ng-if="form.uuid.$dirty && form.uuid.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.uuid.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.uuid.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.uuid']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.macAddr']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-if="isEditMode">
+                    <label>Private IP</label>
+                    <input name="privateIp" ng-model="model.privateIp" disabled>
+                    <div ng-if="form.privateIp.$dirty && form.privateIp.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.privateIp.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.privateIp.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.ip']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-input-container ng-if="isEditMode">
+                    <label>Public IP</label>
+                    <input name="publicIp" ng-model="model.publicIp" disabled>
+                    <div ng-if="form.publicIp.$dirty && form.publicIp.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.publicIp.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.publicIp.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.ip']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-autocomplete force-select
+                        md-no-cache="true"
+                        md-selected-item="model.room"
+                        md-search-text="searchTextRoom"
+                        md-items="option in querySearch(searchTextRoom, formOptions.rooms, 'name')"
+                        md-item-text="getFormattedArea(option)"
+                        md-min-length="0"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true"
+                        md-floating-label="Area">
+                    <md-item-template>
+                            <span md-highlight-flags="^i">
+                                {{option.name}}
+                                <span ng-if="option.parent.name">{{option.parent.name == null ? '':' - ' + option.parent.name}}</span>
+                            </span>
+                    </md-item-template>
+                    <md-not-found>
+                        No areas found
+                    </md-not-found>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Gateway.area']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-autocomplete>
+
+                <md-autocomplete force-select
+                        md-no-cache="true"
+                        md-selected-item="model.controlBeacon"
+                        md-search-text="searchTextBeacons"
+                        md-items="option in querySearch(searchTextBeacons, formOptions.beacons, 'name')"
+                        md-item-text="option.name"
+                        md-min-length="0"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true"
+                        md-floating-label="Beacon">
+                    <md-item-template>
+                            <span md-highlight-flags="^i">
+                                <span ng-if="option.parent.name">{{option.parent.name + ', '}}</span>
+                                {{option.name}}
+                            </span>
+                    </md-item-template>
+                    <md-not-found>
+                        No beacons found
+                    </md-not-found>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Allocation.beacon']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-autocomplete>
+                <div class="red-alert" ng-if="validationErrors" role="alert">
+                    <div ng-repeat="errorText in validationErrors['Allocation']">
+                        {{ errorText }}
+                    </div>
+                </div>
+
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid" ng-click="save()"> Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

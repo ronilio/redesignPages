@@ -1,0 +1,112 @@
+<md-dialog flex="40" layout-padding ng-controller="AssetTypeEntityFormController">
+    <form name="form">
+        <md-dialog-content>
+            <div layout="column" layout-padding layout-margin>
+                <md-input-container>
+                    <label>Asset type</label>
+                    <input name="name" ng-model="model.name" required md-maxlength="60" minlength="4">
+                    <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['AssetType.name']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <md-autocomplete force-select
+                                 md-no-cache="true"
+                                 md-selected-item="model.beaconProcessingType"
+                                 md-search-text="searchTextProcessingType"
+                                 md-items="option in processingTypeSearch(searchTextProcessingType, beaconProcessingType)"
+                                 md-item-text="option"
+                                 md-min-length="0"
+                                 md-floating-label="Processing type"
+                                 md-select-on-match="true"
+                                 md-match-case-insensitive="true"
+                                 md-selected-item-change="onSelectProcessingType()"
+                                 required="true">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No status found
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-input-container ng-show="!isLocationTypeAsset()">
+                    <label>History update count threshold</label>
+                    <input type="number" name="history_threshold" ng-model="model.historyCountThreshold"
+                           ng-required="model.beaconProcessingType=='COUNT_MOVEMENT'" min="2">
+                    <div ng-if="form.history_threshold.$dirty && form.history_threshold.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.history_threshold.$error['min']">Min value is 2!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['AssetType.historyCountThreshold']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+
+                </md-input-container>
+
+                <md-chips ng-if="isLocationTypeAsset()"
+                          ng-model="model.assetStatuses"
+                          md-transform-chip = "addNewAssetStatus($chip)"
+                          placeholder="Type and enter to add Asset Status"
+                          md-on-remove="onDeleteStatus($chip)"
+                          delete-button-label="Remove status"
+                          delete-hint="Press delete to remove status"
+                          secondary-placeholder="+New Status">
+
+                    <md-chip-template>
+                            {{$chip.status}}
+                    </md-chip-template>
+
+                    <md-icon ng-if="!$chip.implicit"  md-chip-remove><i class="zmdi zmdi-close"></i></md-icon>
+                </md-chips>
+                <md-autocomplete force-select
+                        ng-if="model.assetStatuses.length != 0 && isLocationTypeAsset()"
+                        md-no-cache="true"
+                        md-selected-item="model.defaultStatus"
+                        md-search-text="searchTextStatus"
+                        md-items="option in querySearch(searchTextStatus, model.assetStatuses, 'status')"
+                        md-item-text="option.status"
+                        md-min-length="0"
+                        md-floating-label="Default status"
+                        md-select-on-match="true"
+                        md-match-case-insensitive="true"
+                        ng-required="isLocationTypeAsset()">
+                    <md-item-template>
+                        <span md-highlight-flags="^i">{{option.status}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        No status found
+                    </md-not-found>
+                </md-autocomplete>
+
+                <md-checkbox ng-change ="onSelectAccelerometer()" ng-if="isLocationTypeAsset()" ng-model="model.useAccelerometer" aria-label="Use acc">
+                    Use accelerometer
+                </md-checkbox>
+
+                <md-input-container>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors.gateway">
+                            {{ errorText }}
+                        </div>
+                        <div ng-repeat="errorText in validationErrors['AssetType.AssetStatus']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+            </div>
+            <div class="dictionaries-disclaimer" ng-show="isEditMode">{{::disclaimer}}</div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid || (isLocationTypeAsset() && model.assetStatuses.length == 0)"
+                       ng-click="saveAssetType()"> Save</md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>

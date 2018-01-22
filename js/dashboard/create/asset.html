@@ -1,0 +1,136 @@
+<md-dialog flex="45" flex-md="60">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Asset Allocation</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <div layout="row" class="is-active-container">
+        <md-progress-linear ng-show="loadingBeacon" md-mode="indeterminate"></md-progress-linear>
+    </div>
+    <ng-form name="form">
+        <md-dialog-content>
+            <div layout="row" class="md-dialog-content">
+                <div layout="column" flex>
+                    <div class="md-title" md-colors="{color: 'primary'}">Asset Information</div>
+
+                    <div layout-gt-sm="row">
+                           <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-autocomplete
+                                            name="autocomplete"
+                                            enter-handle="searchBeaconForQRCode(searchTextBeacon)"
+                                            class="autocomplete-field-create-asset"
+                                            md-no-cache="true"
+                                            md-selected-item="model.beacon"
+                                            md-search-text="searchTextBeacon"
+                                            md-autoselect
+                                            md-items="option in querySearch(searchTextBeacon, beacons, 'name')"
+                                            md-item-text="option.name"
+                                            md-min-length="0"
+                                            md-floating-label="Select beacon"
+                                            md-select-on-match="true"
+                                            md-match-case-insensitive="true"
+                                            required="true"
+                                            md-input-id="beaconAutoCompleteId"
+                                            md-autofocus
+                                            ng-blur="onBlur()">
+                                <md-item-template>
+                                    <span md-highlight-flags="^i">{{option.name}}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No beacons found
+                                </md-not-found>
+                                <div class="red-alert" ng-if="validationErrors" role="alert">
+                                    <div ng-repeat="errorText in validationErrors['Allocation.beacon']">
+                                        {{ errorText }}
+                                    </div>
+                                </div>
+                            </md-autocomplete>
+                            <md-input-container class="md-block">
+                                <label>Asset ID</label>
+                                <input name="assetId" ng-model="model.name" required md-maxlength="10" minlength="3">
+                                <div ng-if="form.assetId.$dirty && form.assetId.$invalid" role="alert">
+                                    <div class="red-alert" ng-if="form.assetId.$error['md-maxlength']">Please add less characters!</div>
+                                    <div class="red-alert" ng-if="form.assetId.$error['minlength']">Please add more characters!</div>
+                                </div>
+                                <div class="red-alert" ng-if="validationErrors" role="alert">
+                                    <div ng-repeat="errorText in validationErrors['Allocation.assetID']">
+                                        {{ errorText }}
+                                    </div>
+                                </div>
+                            </md-input-container>
+                        </div>
+                        <div layout-gt-sm="column" flex-gt-sm="50">
+                            <md-autocomplete force-select
+                                            class="autocomplete-field-create-asset"
+                                            md-no-cache="true"
+                                            md-selected-item="model.assetType"
+                                            md-search-text="searchTextAssetType"
+                                            md-selected-item-change="onSelectAssetType()"
+                                            md-items="option in querySearch(searchTextAssetType, types, 'name')"
+                                            md-item-text="option.name"
+                                            md-min-length="0"
+                                            md-floating-label="Select type"
+                                            md-select-on-match="true"
+                                            md-match-case-insensitive="true"
+                                            required="true">
+                                <md-item-template>
+                                    <span md-highlight-flags="^i">{{option.name}}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No asset types found
+                                </md-not-found>
+                            </md-autocomplete>
+                            <md-autocomplete force-select
+                                            class="autocomplete-field-create-asset"
+                                            md-no-cache="true"
+                                            md-selected-item="selectedGateway"
+                                            md-selected-item-change="onSelectGateway(selectedGateway)"
+                                            md-search-text="searchTextGateway"
+                                            md-items="option in querySearch(searchTextGateway, gateways, 'name')"
+                                            md-item-text="option.name"
+                                            md-min-length="0"
+                                            md-floating-label="Select gateway"
+                                            md-select-on-match="true"
+                                            md-match-case-insensitive="true"
+                                            ng-show="model.assetType.beaconProcessingType==='COUNT_MOVEMENT'"
+                                            ng-required="model.assetType.beaconProcessingType==='COUNT_MOVEMENT'">
+                                <md-item-template>
+                                    <span md-highlight-flags="^i">{{option.name}}</span>
+                                </md-item-template>
+                                <md-not-found>
+                                    No gateways found
+                                </md-not-found>
+                                <div class="red-alert" ng-if="validationErrors" role="alert">
+                                    <div ng-repeat="errorText in validationErrors['Allocation.gateway']">
+                                        {{ errorText }}
+                                    </div>
+                                </div>
+                            </md-autocomplete> 
+                        </div>
+                    </div>
+
+
+                    <div layout="row" layout-wrap>
+                        <md-input-container flex="100">
+                            <label>Description</label>
+                            <textarea name="description" ng-model="model.meta.assetDescription" md-maxlength="90"
+                                    minlength="5"></textarea>
+                            <div ng-if="form.description.$dirty && form.description.$invalid" role="alert">
+                                <div class="red-alert" ng-if="form.description.$error['md-maxlength']">Please add less characters!</div>
+                                <div class="red-alert" ng-if="form.description.$error['minlength']">Please add more characters!</div>
+                            </div>
+                        </md-input-container>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+            <md-button class="md-warn" ng-click="close()">Cancel</md-button>
+            <md-button class="md-primary" ng-disabled="form.$invalid || model.beacon == undefined" ng-click="save()">Save</md-button>
+        </md-dialog-actions>
+    </ng-form>
+</md-dialog>

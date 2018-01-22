@@ -1,0 +1,71 @@
+<div layout="column" layout-padding layout-margin ng-init="focusInput('macAddrInput')">
+
+    <md-input-container>
+        <label>Name</label>
+        <input name="name" ng-model="model.name" required md-maxlength="60" minlength="4">
+        <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+            <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+            <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+        </div>
+        <div class="red-alert" ng-if="validationErrors" role="alert">
+            <div ng-repeat="errorText in validationErrors['Beacon.name']">
+                {{ errorText }}
+            </div>
+        </div>
+    </md-input-container>
+
+    <md-input-container class="styled-placeholder">
+        <label>UUID</label>
+        <input name="uuid" ng-model="model.uuid" md-maxlength="36" minlength="36" placeholder="This value is used for proximity tracking on mobile app" ng-disabled="blockUUID" required>
+        <div ng-if="form.uuid.$dirty && form.uuid.$invalid" role="alert">
+            <div class="red-alert" ng-if="form.uuid.$error['md-maxlength']">Please add less characters!</div>
+            <div class="red-alert" ng-if="form.uuid.$error['minlength']">Please add more characters!</div>
+        </div>
+        <div class="red-alert" ng-if="validationErrors" role="alert">
+            <div ng-repeat="errorText in validationErrors['Beacon.uuid']">
+                {{ errorText }}
+            </div>
+        </div>
+    </md-input-container>
+
+    <div flex layout="row">
+        <md-input-container flex="50" class="styled-placeholder">
+            <label>Minor</label>
+            <input name="minor" ng-model="model.minor">
+        </md-input-container>
+
+        <md-input-container flex="50" class="styled-placeholder">
+            <label>Major</label>
+            <input name="major" ng-model="model.major">
+        </md-input-container>
+    </div>
+
+    <md-input-container>
+        <label>MAC Address</label>
+        <input id="macAddrInput" name="macAddress" ng-model="model.macAddr" enter-handle="setBeaconInfo()">
+        <div ng-if="form.madAddress.$dirty && form.madAddress.$invalid" role="alert">
+            <div class="red-alert" ng-if="form.madAddress.$error['md-maxlength']">Please add less characters!</div>
+            <div class="red-alert" ng-if="form.madAddress.$error['minlength']">Please add more characters!</div>
+        </div>
+        <div class="red-alert" ng-if="validationErrors" role="alert">
+            <div ng-repeat="errorText in validationErrors['Beacon.macAddr']">
+                {{ errorText }}
+            </div>
+        </div>
+    </md-input-container>
+
+    <md-input-container flex="100" style="margin-top: 28px;" ng-if="!isEditMode">
+        <md-checkbox ng-model="model.openNewBeaconForm" aria-label="Save and add new beacon">
+            Save and add new beacon
+        </md-checkbox>
+    </md-input-container>
+
+    <md-button class="md-icon-button accordion" aria-label="More" ng-if="isEditMode" ng-click="$parent.acordionIsActive = !$parent.acordionIsActive" ng-class="{'active': acordionIsActive === true}">
+        <i class="zmdi zmdi-chevron-down" ng-if="!acordionIsActive"></i>
+        <i class="zmdi zmdi-chevron-up" ng-if="acordionIsActive"></i>
+    </md-button>
+    <md-input-container flex="100" class="panel" ng-if="isEditMode" ng-class="{'show': acordionIsActive === true}">
+        <label>Raw Signals</label>
+        <textarea id="rawSignals" name="rawSignals" ng-model="model.rawSignals" disabled></textarea>
+    </md-input-container>
+</div>

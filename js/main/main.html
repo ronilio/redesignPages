@@ -1,0 +1,8 @@
+<div layout="column" flex>
+    <toolbar user="main.user" logo="main.theme.logo" on-menu="main.toggleMenu()" elevation="main.toolbarElevation"></toolbar>
+
+    <div layout="row" flex>
+        <sidenav toggle="main.toggle" list="main.navList"></sidenav>
+        <ui-view name="content" flex autoscroll></ui-view>
+    </div>
+</div>

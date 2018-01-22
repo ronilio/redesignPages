@@ -1,0 +1,186 @@
+<div ng-if="savingEntity" layout="row" class="is-active-container">-
+    <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+</div>
+<form class="floor-form" name="form" layout-fill>
+    <div ng-if = "editStep==1" flex layout="column" layout-fill>
+        <div layout="column" flex="20">
+            <div layout="row" flex="50" layout-padding>
+                <md-input-container flex="20">
+                    <label>Name</label>
+                    <input autofocus name="name" ng-model="model.name" required maxlength="30">
+                    <div ng-messages="form.name.$error" ng-show="form.name.$invalid" role="alert">
+                        <div ng-message='maxlength'>Please add less characters!</div>
+                    </div>
+                    <div ng-messages="validationErrors" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Floor.name']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+                <md-input-container flex="40">
+                    <label>Description</label>
+                    <input name="description" ng-model="model.description" required minlength="5" maxlength="255">
+                    <div ng-messages="form.description.$error" ng-show="form.description.$invalid" role="alert">
+                        <div ng-message='maxlength'>Please add less characters!</div>
+                        <div ng-message="minlength">Please add more characters!</div>
+                    </div>
+                    <div ng-messages="validationErrors" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['Floor.description']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+                <md-input-container md-no-float>
+                    <label>Unit</label>
+                    <md-select name="unit" required md-no-float ng-model="model.mapMetadata.unit">
+                        <md-option ng-repeat="unit in formOptions.units" value="{{unit}}">
+                            {{unit}}
+                        </md-option>
+                    </md-select>
+                    <div ng-messages="form.unit.$error" ng-if="!form.unit.$valid" role="alert">
+                        <div ng-message='required'>Please fill in the unit!</div>
+                    </div>
+                </md-input-container>
+                <md-input-container ng-if="knownScale" md-no-float class="scale-one-input">
+                    <label>{{model.mapMetadata.unit}} to pixel ratio</label>
+                    <input name="scale" ng-model="model.mapMetadata.scale" ng-required="{{knownScale}}" type="number" placeholder="1" min="0">
+                    <div ng-messages="form.scaleOne.$error" ng-show="!form.scaleOne.$valid" role="alert">
+                        <div ng-message='required'>Please fill in the scale!</div>
+                        <div ng-message='min'>Scale must be a greater than 0!</div>
+                    </div>
+                </md-input-container>
+                <div ng-if="media.files[0] || model.mapMetadata.mapImageUrl" layout="row">
+                    <md-button ng-if="!showScaleMap" class="md-primary no-left-padding-margin" ng-click="displayScaleMap()">Find out your map's scale</md-button>
+                    <md-button ng-if="showScaleMap" class="md-primary no-left-padding-margin" ng-click="hideScaleMap()">I know the scale</md-button>
+                </div>
+            </div>
+            <div flex ng-if="!knownScale" class="instructions"> Draw a line on the map and provide the distance it represents:&nbsp
+                <md-input-container md-no-float>
+                    <label>Real distance</label>
+                    <input name="scaleTo" ng-change="computeDecimalMapScale()" type="number" ng-model="scale.to" placeholder="5" min="1" ng-required="{{!knownScale}}">
+                    <div ng-messages="form.scaleTo.$error" ng-show="!form.scaleTo.$valid" role="alert">
+                        <div ng-message='required'>Please fill in the scale!</div>
+                        <div ng-message='min'>Scale must be a greater than 0!</div>
+                    </div>
+                </md-input-container>
+                <span>{{model.mapMetadata.unit.charAt(0)}}</span>
+            </div>
+        </div>
+        <div id="scale-map" ng-if="!knownScale" flex="75" layout="column" class="scale-map-wrapper">
+            <leaflet-map  container-id="scale-map" available-shapes="scaleMapShapes" image-overlay="scaleOptions.mapImageUrl"
+                         height="scaleOptions.height" width="scaleOptions.width" handle-map-drawing="handleMapScaleCreated"
+                         handle-map-delete-drawing="handleScaleLineDeleted" can-draw="true" can-edit="true" can-delete="true"
+            ></leaflet-map>
+        </div>
+        <div ng-if="knownScale" flex="75">
+            <md-input-container>
+                <div ng-if="knownScale" class="drop-box" name="imageMap" ngf-drop ngf-select ng-model="media.files" ngf-model-invalid="errorFiles" ngf-multiple="true"
+                     ngf-allow-dir="true" ngf-max-size="10MB" accept="image/*">
+                    <div>Drag & Drop Image up to 10MB</div>
+                    <div ng-show="(media.files[0] && !isEditMode) || mapImageChanged">
+                        <img ngf-thumbnail="media.files[0]" class="preview-image">
+                    </div>
+                    <div ng-show="isEditMode && !mapImageChanged">
+                        <img ng-src="{{model.mapMetadata.mapImageUrl}}" class="preview-image">
+                    </div>
+                </div>
+                <div ng-messages="form.imageMap.$error" ng-show="!form.imageMap.$valid" role="alert">
+                    <div ng-message='maxSize'>Image is too big!</div>
+                </div>
+            </md-input-container>
+        </div>
+        <div flex="5">
+            <md-menu>
+                <md-button aria-label="Close" class="md-icon-button" ng-click="close()">
+                    <i class="zmdi zmdi-close zmdi-hc-2x specialRed"></i>
+                </md-button>
+                <md-menu-content></md-menu-content>
+            </md-menu>
+            <md-menu ng-disabled="(!model.mapMetadata.mapImageUrl || !media.files.length) && form.$invalid">
+                <md-button aria-label="Save" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <i class="zmdi zmdi-save zmdi-hc-2x green"></i>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button ng-click="saveFloor(true)">
+                            Save and close
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="saveFloor(false)">
+                            Save and edit map
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+    <div ng-if = "editStep==2" flex layout="column" layout-fill>
+        <div flex= "95" layout="row" class="mapping">
+            <div flex="85" layout="column">
+                <div flex= "10" class="section-title">
+                    Define floor map features
+                </div>
+                <div flex= "" id="room-map" class="room-map-wrapper">
+                    <leaflet-map container-id="room-map" class="room-map-wrapper" available-shapes="roomMapShapes" ng-if="showRoomMap" image-overlay="roomMapOptions.mapImageUrl"
+                             height="roomMapOptions.height" features="floorFeatures" width="roomMapOptions.width" handle-map-drawing="handleMapDrawCreated"
+                             handle-map-delete-drawing="deleteFloorFeatures" handle-map-edit-drawing="updateMapFeatures" select-drawing-to-bind="selectDrawingToBind"
+                             can-draw="true" can-delete="true" can-edit="true" scrollWheelZoom="true"></leaflet-map>
+                </div>
+            </div>
+            <div flex="15" layout="column" layout-padding layout-margin>
+                <md-input-container md-no-float>
+                    <label>Feature Type</label>
+                    <md-select name="featureType" md-no-float ng-model="featureType">
+                        <md-option ng-repeat="feature in formOptions.featureTypes" value="{{feature}}">
+                            {{feature}}
+                        </md-option>
+                    </md-select>
+                </md-input-container>
+                <div ng-if="featureType === FEATURE_TYPES.ROOM" class="rooms-list" layout-fill>
+                    <div>Rooms in use</div>
+                    <div class="placeholder" ng-if="formOptions.usedRooms.length === 0">
+                        - no rooms in use -
+                    </div>
+                    <div ng-repeat="room in formOptions.usedRooms | orderBy: 'name' track by $index" ng-style="{'background-color': room.color}"
+                         class="room-item used">
+                        {{room.name}}
+                    </div>
+                    <div class="title">Free rooms</div>
+                    <div class="placeholder" ng-if="formOptions.rooms.length === 0">
+                        - no free rooms -
+                    </div>
+                    <div ng-repeat="room in formOptions.rooms | orderBy: 'name' track by $index" ng-style="{'background-color': room.color}"
+                         ng-click="saveFloorFeature(room)" class="room-item free">
+                        {{room.name}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div flex="5">
+            <md-menu>
+                <md-button aria-label="Close" class="md-icon-button" ng-click="close()">
+                    <i class="zmdi zmdi-close zmdi-hc-2x specialRed"></i>
+                </md-button>
+                <md-menu-content></md-menu-content>
+            </md-menu>
+            <md-menu ng-disabled="(!model.mapMetadata.mapImageUrl || !media.files.length) && form.$invalid">
+                <md-button aria-label="Save" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                    <i class="zmdi zmdi-save zmdi-hc-2x green"></i>
+                </md-button>
+                <md-menu-content width="3">
+                    <md-menu-item>
+                        <md-button ng-click="saveMap(true)">
+                            Save and close
+                        </md-button>
+                    </md-menu-item>
+                    <md-menu-item>
+                        <md-button ng-click="saveMap(false)">
+                            Save and edit floor
+                        </md-button>
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,60 @@
+<div layout-padding style="height:100%" class="flow-definition">
+    <form style="height:100%" name="form">
+            <div layout="column" style="height:100%" flex layout-padding layout-margin>
+                <md-input-container>
+                    <label>Name</label>
+                    <input name="name" ng-model="model.pathName" required md-maxlength="60" minlength="1">
+                    <div ng-if="form.name.$dirty && form.name.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.name.$error['md-maxlength']">Please add less characters!</div>
+                        <div class="red-alert" ng-if="form.name.$error['minlength']">Please add more characters!</div>
+                    </div>
+                    <div class="red-alert" ng-if="validationErrors" role="alert">
+                        <div ng-repeat="errorText in validationErrors['PathName']">
+                            {{ errorText }}
+                        </div>
+                    </div>
+                </md-input-container>
+
+                <div flex="90" layout="row" layout-xs="column" style="height: 350px">
+                    <div flex class="left-container" layout="column">
+                        <label>Available Areas</label>
+                        <md-button ng-click="addRoomToFlow(room, draggableItems.length)" style="width: 100%" ng-repeat="room in roomsList">
+                            {{room.name + '>>'}}
+                        </md-button>
+                    </div>
+                    <div flex class="right-container" layout="column">
+                        <div class="red-alert" ng-if="validationErrors" role="alert">
+                            <div ng-repeat="errorText in validationErrors['PatientPath']">
+                                {{ errorText }}
+                            </div>
+                        </div>
+                        <label>Patient Flow</label>
+                        <div data-as-sortable data-ng-model="draggableItems">
+                            <div data-ng-repeat="draggableItem in draggableItems"  data-as-sortable-item
+                                 style="height: 48px;width: 95%;border: 1px solid #000000;margin: 10px;text-align: center;line-height: 50px;"
+                                 ng-style="{backgroundColor: draggableItem.color}">
+                                <div data-as-sortable-item-handle style="height: 100%; width: 100%;">
+                                    {{draggableItem.name}}
+                                    <div style="height: 48px;width: 48px;float: right;background: #ffffff;border: 1px solid #000000;margin-top: -1px;margin-right: -1px; padding-left: 10px;">
+                                        <md-tooltip>
+                                            Optional room?
+                                        </md-tooltip>
+                                        <md-checkbox ng-model="draggableItem.optionalPath" aria-label="Optional room?"></md-checkbox>
+                                    </div>
+                                    <div style="height: 48px;width: 48px;float: right;background: #ffffff;border: 1px solid #000000;margin-top: -1px;margin-right: -1px;">
+                                        <i ng-click="removeRoomFromFlow(draggableItem, $index)" style="margin-top: 10px;color: #ff0000;" class="zmdi zmdi-hc-2x zmdi-delete"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>{{::disclaimer}}</div>
+                <div layout="row">
+                    <md-button class="md-warn" ng-click="resetChanges()">Reset changes</md-button>
+                    <md-button class="md-primary" ng-disabled="form.$invalid || draggableItems.length == 0" ng-click="submitFlow()">Save</md-button>
+                </div>
+            </div>
+    </form>
+</div>
+

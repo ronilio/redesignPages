@@ -1,0 +1,161 @@
+<md-dialog flex="65" flex-md="85">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Patient Details</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="patientDetails.close()">
+                <md-icon aria-label="Close Dialog">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <md-tabs md-dynamic-height md-border-bottom md-stretch-tabs="always"> 
+            <md-tab label="Details">
+                <md-content layout="column">
+                        <div layout-margin>
+                            <div layout="row">
+                                <div class="md-title" md-colors="{color: 'primary'}">{{patientDetails.allocation.name}}</div>
+                            </div>
+                            <div layout="row">  
+                                <div class="md-subhead">{{patientDetails.allocation.assetType.name}}</div>
+                            </div>
+                        
+                        <md-table-container>
+                            <table md-table>
+                                <tbody md-body>
+                                    <tr md-row> 
+                                        <td md-cell>Patient Name</td>
+                                        <td md-cell>
+                                            <span ng-if="!patientDetails.allocation.meta.patientFirstName && !patientDetails.allocation.meta.patientLastName">{{'-'}}</span>
+                                            <span ng-if="patientDetails.allocation.meta.patientFirstName || patientDetails.allocation.meta.patientLastName">{{patientDetails.allocation.meta.patientFirstName + ' ' + allocation.meta.patientLastName}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Procedure</td>
+                                        <td md-cell>{{patientDetails.allocation.meta.surgeryType.name || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell><span>Procedure Time</span></td>
+                                        <td md-cell>
+                                            <span ng-if="allocation.status">{{patientDetails.allocation.status}}</span>
+                                            <span ng-if="allocation.meta.surgeryDateTime">{{patientDetails.allocation.meta.surgeryDateTime | amDateFormat:'MM/DD/YYYY'}}</span>
+                                            <span ng-if="allocation.meta.surgeryDateTime">{{patientDetails.allocation.meta.surgeryDateTime | amDateFormat:'hh:mm A'}}</span>
+                                            <span ng-if="allocation.meta.surgeryDate && !allocation.meta.surgeryDateTime">{{patientDetails.allocation.meta.surgeryDate | amDateFormat:'MM/DD/YYYY'}}</span>
+                                            <span ng-if="allocation.meta.surgeryTime && !allocation.meta.surgeryDateTime">{{patientDetails.allocation.meta.surgeryTime | amDateFormat:'hh:mm A'}}</span>
+                                            <span ng-if="!allocation.meta.surgeryDateTime && !allocation.meta.surgeryDate && !allocation.meta.surgeryTime">{{'-'}}</span>
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>{{patientDetails.allocation.locationLabel}}</td>
+                                        <td md-cell>
+                                                {{patientDetails.allocation.location.area}}
+                                                <span ng-if="!patientDetails.allocation.location.area && !patientDetails.allocation.location.room">Unknown</span>
+                                                <span ng-if="patientDetails.allocation.location.area && patientDetails.allocation.location.room">, </span>
+                                                {{patientDetails.allocation.location.room}}
+                                        </td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Physician</th>
+                                        <td md-cell>{{patientDetails.allocation.meta.doctor.name || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Anesthesiologist</th>
+                                        <td md-cell>{{patientDetails.allocation.meta.anesthesiologist.name || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Nurse Name</td>
+                                        <td md-cell>{{patientDetails.allocation.meta.nurseName || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Description</td>
+                                        <td md-cell>{{patientDetails.allocation.meta.phoneNumbers.toString() || '-'}}</td>
+                                    </tr>
+                                    <tr md-row>
+                                        <td md-cell>Phone Number(s) Associated with Patient</td>
+                                        <td md-cell>{{patientDetails.allocation.meta.phoneNumbers.toString() || '-'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </md-table-container>
+                    </div>
+                </md-content>
+            </md-tab>
+            <md-tab label="Location History">
+                <md-content layout="column" layout-margin>
+                    <div layout-margin>
+                        <div layout="row">
+                            <div class="md-title" md-colors="{color: 'primary'}">{{patientDetails.allocation.name}}</div>
+                        </div>
+                        <div layout="row">  
+                            <div class="md-subhead">{{patientDetails.allocation.assetType.name}}</div>
+                        </div>
+                    </div>
+                    <!-- <div layout="row">
+                        <div>{{allocation.locationLabel}}:&nbsp</div>
+                        <div>
+                            {{allocation.location.area}}
+                            <span ng-if="!allocation.location.area && !allocation.location.room">Unknown</span>
+                            <span ng-if="allocation.location.area && allocation.location.room">, </span>
+                            {{allocation.location.room}}
+                        </div>
+                    </div> -->
+
+                    <!-- <md-card> -->
+                        <!-- <md-toolbar class="md-table-toolbar md-default"> -->
+                        <div layout="row" layout-margin> <!--<div class="md-toolbar-tools">-->
+                            <div class="md-subhead">
+                                Previous Locations
+                            </div>
+                        </div>
+                        <!-- </md-toolbar> -->
+                        
+                        <md-table-container ng-if="patientDetails.allocation.history.length != 0">
+                        <table md-table>
+                            <thead md-head>
+                                <tr md-row>
+                                    <th md-column>Name</th>
+                                    <th md-column>Status</th>
+                                    <th md-column>In</th>
+                                    <th md-column>Out</th>
+                                </tr>
+                            </thead>
+                            <tbody md-body>
+                                <tr md-row ng-repeat="item in patientDetails.allocation.history">
+                                    <td md-cell><span ng-if="item.parentName && item.parentName.length > 0">{{item.parentName + ', '}}</span>{{ item.roomName }}</td>
+                                    <td md-cell>{{item.status}}</td>
+                                    <td md-cell>{{item.entryTime | amDateFormat:'MM/DD/YYYY  h:mma'}}</td>
+                                    <td md-cell>{{item.exitTime | amDateFormat:'MM/DD/YYYY h:mma'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </md-table-container>
+                        <div ng-if="patientDetails.allocation.history.length == 0">No location history available</div>
+                        <div ng-show='isBusyRequestingData'>Loading history...</div>
+                    <!-- </md-card> -->
+                </md-content>
+            </md-tab>
+            <md-tab label="View Map" ng-if="allocationOptions.mapImageUrl">
+                <md-content layout="column" layout-margin>
+                    <div id="patient-map-id" layout="column">
+                        <leaflet-map container-id="patient-map-id" style="height: 480px; width: 100%;" id="allocation-map" class="allocation-map-wrapper" image-overlay="allocationOptions.mapImageUrl"
+                            height="allocationOptions.height" width="allocationOptions.width" features="allocationFeatures" can-draw="false"
+                            can-edit="false" can-delete="false"></leaflet-map>
+                    </div>
+                </md-content>
+            </md-tab>
+        </md-tabs>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+        <div ng-if="ROLES.SAD || ROLES.HAD || ROLES.HCL">
+            <md-button class="md-icon-button" ng-click="patientDetails.edit()">
+                <md-tooltip>Edit</md-tooltip>
+                <md-icon>mode_edit</md-icon>
+            </md-button>
+            <md-button class="md-icon-button" ng-click="patientDetails.discard()">
+                <md-tooltip>Discharge</md-tooltip>
+                <md-icon>delete</md-icon>>
+            </md-button>
+            <md-button ng-hide="true"></md-button>
+        </div>
+    </md-dialog-actions>
+</md-dialog>

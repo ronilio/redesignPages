@@ -1,0 +1,42 @@
+<md-content md-whiteframe="3" class="il-rounded-toolbar">
+    <div layout="column" class="il-databar">
+        <div layout="row" class="md-toolbar-tools">
+                <div class="il-databar-headline">
+                    Beacon Overview
+                </div>
+                <span flex></span>
+                <!-- <md-button class="md-icon-button" ng-click="databar.onAllocate()">
+                    <md-icon id="il-databar-button-override">add</md-icon>
+                </md-button> -->
+                <md-button class="md-accent" ng-click="databar.onAllocation()" hide-xs>
+                    Add New
+                </md-button>
+                <md-button class="md-icon-button" hide-gt-xs>
+                    <md-icon id="il-databar-button-override">more_vert</md-icon>
+                </md-button>
+        </div>
+        <div layout="row" layout-padding> 
+            <div layout="column" layout-align="center center" layout-align-xs="center start" flex 50>
+                <div layout="row">
+                    <div class="md-headline" md-colors="{color: 'primary-400'}" layout="column"> 
+                        {{databar.usedBeacons}}
+                    </div>
+                    <div class="md-subhead il-databar-content-title" layout="column" layout-align="end">
+                        used beacons
+                    </div>
+                </div>
+            </div>
+            <md-divider class="il-databar-content-divider"></md-divider>
+            <div layout="column" layout-align="center center" layout-align-xs="center start" flex 50>
+                <div layout="row">
+                    <div class="md-headline" md-colors="{color: 'primary-400'}" layout="column"> 
+                        {{databar.freeBeacons}}
+                    </div>
+                    <div class="md-subhead il-databar-content-title" layout="column" layout-align="end">
+                        free beacons
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>

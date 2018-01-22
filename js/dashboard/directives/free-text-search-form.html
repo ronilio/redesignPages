@@ -1,0 +1,19 @@
+<div class="md-whiteframe-0dp free-search-form free-text-search-form search-form-height" flex="100">
+    <div layout="row">
+        <div class="input search-input" style="margin: 0" layout-margin>
+            <form ng-submit="search(search.text)">
+                <md-input-container class="ms-size-override" style="margin: 0" md-no-float layout="row">
+                    <i style="padding-right: 15px;" class="zmdi zmdi-search zmdi-hc-2x"></i>
+                    <input flex="1" name="text" ng-model="search.text" placeholder="Search..."/>
+                </md-input-container>
+            </form>
+        </div>
+        <div flex></div>
+        <md-button class="filter-button reset btnMargin" ng-click="reset()">
+            Reset
+        </md-button>
+        <md-button class="filter-button btnMargin" ng-click="search(search.text)">
+            Apply
+        </md-button>
+    </div>
+</div>

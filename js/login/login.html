@@ -1,0 +1,56 @@
+<md-content layout="column" flex layout-align="center center">
+    <div class="loginIEMaxWidth" style="width: 100%; min-height: 300px;" layout="row" layout-align="center center">
+        <md-whiteframe style="width: 100%; height: 100%;" class="md-whiteframe-4dp" layout="column" flex="30" flex-sm="100" flex-xs="100" layout-padding>
+            <form name="form" class="loginIEMaxHeight">
+                <md-content style="overflow-x: hidden">
+                    <img ng-src="{{theme.logo}}" width="100%"/>
+                    <md-input-container layout="column">
+                        <label>Email</label>
+                        <input name="email" type="email" ng-model="user.email" required>
+                    </md-input-container>
+                    <div ng-if="form.email.$dirty && form.email.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.email.$error['required']">Please enter an email address</div>
+                        <div class="red-alert" ng-if="form.email.$error['email']">Please enter a valid email address</div>
+                    </div>
+                    <md-input-container layout="column">
+                        <label>Password</label>
+                        <input name="pwd" ng-model="user.password" type="password" required/>
+                    </md-input-container>
+                    <div ng-if="form.pwd.$dirty && form.pwd.$invalid" role="alert">
+                        <div class="red-alert" ng-if="form.pwd.$error['required']">Please enter a password</div>
+                    </div>
+
+                    <md-input-container>
+                        <div ng-messages="errors" ng-if="errors.length > 0" role="alert">
+                            <div ng-repeat="errorText in errors">
+                                {{ errorText.toString() }}
+                            </div>
+                        </div>
+                    </md-input-container>
+
+                    <div layout="row" layout-sm="column" layout-align="center center" layout-margin>
+                        <md-button class="md-raised" flex="50" flex-sm="100" ng-disabled="form.$invalid" type="submit" ng-click="login()">Login</md-button>
+                    </div>
+                </md-content>
+            </form>
+        </md-whiteframe>
+    </div>
+    <div layout="column" layout-margin>
+        <a class="forgot-password-btn" href="#/resetPassword">
+            Forgot password?
+        </a>
+    </div>
+    <div layout = "row" layout-wrap class="download-app" layout-margin ng-if="storeIosURL || storeAndroidURL">
+        <div layout="row" ng-if="storeIosURL">
+            <i class="zmdi zmdi-apple"></i><span>&nbsp;Download your iOS app&nbsp;</span><a class="forgot-password-btn" ng-href="{{'itms-services://?action=download-manifest&url='+storeIosURL}}">here</a>
+        </div>
+        <div layout="row" ng-if="storeAndroidURL" >
+            <i class="zmdi zmdi-android"></i><span>&nbsp;Download your Android app&nbsp;</span><a class="forgot-password-btn" ng-href="{{storeAndroidURL}}">here</a>
+        </div>
+    </div>
+
+    <div ng-show="isAccountLocked" class="locked-account">
+        {{::lockedMessage}}
+    </div>
+
+</md-content>

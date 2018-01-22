@@ -1,0 +1,61 @@
+<!-- All dialogs require developer to pass controllerAs: 'modal' when showing dialog -->
+
+<md-dialog>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Asset Allocation</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="modal.close()">
+                    <md-icon aria-label="Close Dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <div layout="row">
+                    <div layout="column" flex>
+                        <div class="md-title">Asset Information</div>
+             
+                        <div layout-gt-sm="row">
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-input-container>
+                                    <label>Select Beacon</label>
+                                    <input ng-model="modal.asset.beacon" autofocus>
+                                </md-input-container>
+                                <md-input-container>
+                                    <label>Asset ID</label>
+                                    <input ng-model="modal.asset.id">
+                                </md-input-container>
+                            </div>
+                            <div layout-gt-sm="column" flex-gt-sm="50">
+                                <md-input-container>
+                                    <label>Asset Type</label>
+                                    <input ng-model="modal.asset.type">
+                                </md-input-container>
+                                <md-input-container ng-show="modal.setGateway">
+                                    <label>Select Gateway</label>
+                                    <input ng-model="modal.asset.gateway">
+                                </md-input-container>
+                            </div>
+                        </div>
+                        <div layout="row">
+                            <md-input-container flex> 
+                                <label>Description</label>
+                                <input ng-model="modal.asset.description">
+                            </md-input-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <md-button class="md-accent" ng-click="modal.close()">
+                Discard
+            </md-button>
+            <md-button class="md-primary" ng-click="modal.save()" ng-disabled="modal.saveDisabled">
+                Save
+            </md-button>
+        </md-dialog-actions>
+    </md-dialog>
+    
