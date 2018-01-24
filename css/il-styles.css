@@ -7,6 +7,11 @@
     overflow-y: scroll;
 }
 
+.il-search-card {
+    min-height: 72px;
+    max-height: 72px; 
+}
+
 .il-search-bar {
     min-height: 64px;
     max-height: 64px; 
@@ -41,14 +46,9 @@
 }
 
 .il-side-filter {
-    background: white;
-    min-width: 256px;
-    max-width: 256px;
-}
-
-.il-databar {
-    background: white;
-    border-radius: 3px;
+    /* background: white; */
+    min-width: 280px;
+    max-width: 280px;
 }
 
 .il-databar-content {
@@ -82,6 +82,10 @@
 #il-toggle-button {
     height: 48px;
     width: 48px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 #il-toggle-button-icon {
@@ -96,4 +100,43 @@
     font-size: 10px;
     margin: 0;
     min-width: 1%;
+}
+
+.il-login-art-primary {
+    position:absolute;
+    right: 90%;
+	width: 800px;
+    height: 100%;
+    transform: skew(160deg);
+    opacity: 95%;
+}
+
+.il-login-art-accent {
+    position:absolute;
+    left: 90%;
+	width: 800px;
+    height: 100%;
+    transform: skew(160deg);
+    opacity: 95%;
+}
+
+.il-login-content {
+    z-index: 999;
+}
+
+.il-login-container {
+    position: relative;
+    overflow: hidden;
+}
+
+
+table[md-table] .md-checkbox-column,
+table[md-table] .md-checkbox-cell {
+  display: none;
+}
+
+input[type="datetime-local"] {
+    font: 'Roboto';
+    background: green;
+    color: yellow;
 }

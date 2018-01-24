@@ -3,16 +3,16 @@
         <tabbar tabs="dashboard.tabs" flex></tabbar>
         <button-toggle on-toggle="dashboard.gridTableToggle"></button-toggle>
     </div>
-    <div layout="row" flex>
+    <md-content layout="row" flex layout-padding>
         <div>
             <sidefilter filters="dashboard.filters" on-filters-applied="dashboard.onFiltersApplied" layout-fill></sidefilter>
         </div>
-        <md-content layout-fill layout-padding ng-if="dashboard.PERMISSIONS.atrak || dashboard.PERMISSIONS.ptrak">
-            <databar free-beacons="dashboard.availableCount" used-beacons="dashboard.usedCount" on-allocate="dashboard.openAllocationForm" layout-margin></databar>
+        <div ng-if="dashboard.PERMISSIONS.atrak || dashboard.PERMISSIONS.ptrak" layout-fill style="overflow-x:hidden">
+            <databar free-beacons="dashboard.availableCount" used-beacons="dashboard.usedCount" on-allocate="dashboard.openAllocationForm"></databar>
             <div class="md-title">{{dashboard.searchResultPrompt}}</div>
             
             <!-- Data view for assets or patients -->
             <ui-view layout="column" layout-fill view-state="dashboard.useCardView" filters="dashboard.currentFilter"></ui-view>
-        </md-content>  
-    </div>
+        </div>  
+    </md-content>
 </div>

@@ -3,7 +3,7 @@
         <div class="md-toolbar-tools">
             <h2>Patient Allocation</h2>
             <span flex></span>
-            <md-button class="md-icon-button" ng-click="modal.close()">
+            <md-button class="md-icon-button" ng-click="close()">
                 <md-icon aria-label="Close Dialog">close</md-icon>
             </md-button>
         </div>
@@ -15,7 +15,7 @@
         <md-dialog-content class="md-dialog-content">
             <div layout="row">
                 <div layout="column" flex>
-                    <div class="md-title" md-colors="{color: 'primary'}">Patient Information</div>
+                    <div class="md-title" md-colors="{color: 'accent'}">Patient Information</div>
                     <div layout="column" layout-gt-sm="row">
                         <md-autocomplete force-select
                                         style="padding-right:10px"
@@ -89,7 +89,7 @@
             </div>
             <div layout="row">
                 <div layout="column" flex>
-                    <div class="md-title" md-colors="{color: 'primary'}">Patient Description</div>
+                    <div class="md-title" md-colors="{color: 'accent'}">Patient Description</div>
 
                     <!-- TODO: needs support -->
                     <div layout="column" layout-gt-sm="row">
@@ -130,7 +130,7 @@
             </div>
             <div layout="row">
                 <div layout="column" flex>
-                    <div class="md-title" md-colors="{color: 'primary'}">Procedure Information</div>
+                    <div class="md-title" md-colors="{color: 'accent'}">Procedure Information</div>
                     <div layout="column" layout-gt-sm="row">
                             <md-autocomplete force-select
                                         flex-gt-sm="50"
@@ -213,7 +213,7 @@
             </div>
             <div layout="row">
                 <div layout="column" flex>
-                    <div class="md-title" md-colors="{color: 'primary'}">Contact Information</div>
+                    <div class="md-title" md-colors="{color: 'accent'}">Contact Information</div>
 
                     <div layout="row">
                         <md-chips

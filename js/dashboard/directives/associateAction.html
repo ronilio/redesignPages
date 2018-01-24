@@ -14,7 +14,7 @@
         </div>
     </div>
     <div flex="50" layout="row" class="allocate">
-        <md-button flex="100" class="inventory addBeaconsBtn"  ng-style="{'background-color': theme.color3}" ng-disabled="freeBeaconCount == 0" ng-class="{'disableBtn' : freeBeaconCount == 0}" layout-align="center center" ng-click="addCallback(type)">
+        <md-button flex="100" class="inventory addBeaconsBtn"  ng-style="{'background-color': theme.color3}" ng-disabled="type== 'asset' && freeBeaconCount == 0" ng-class="{'disableBtn' : (type== 'asset' && freeBeaconCount == 0)}" layout-align="center center" ng-click="addCallback(type)">
             <div class="allocateText">allocate</div>
             <i style="font-size: 6em" class="zmdi zmdi-plus zmdi-hc-5x white"></i>
         </md-button>
